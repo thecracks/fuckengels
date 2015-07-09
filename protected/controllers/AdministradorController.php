@@ -2487,6 +2487,24 @@ class AdministradorController extends Controller {
                 ->setCategory("Test result file");
 
         // Add some data
+        
+        $cellini1='A7';
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->mergeCells('A7:A8');
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', 'Hello')
                 ->setCellValue('B2', 'world!')
