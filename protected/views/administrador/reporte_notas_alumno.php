@@ -80,7 +80,7 @@
                             </div>
                             <br>
                             
-                              <form id="frGeneraReporteBimestralll" method="post" action="<?php echo Yii::app()->request->baseUrl . '/administrador/Cargareportebimstralalumno'?>"> 
+                              <form id="frGeneraReporteBimestral" method="post" action="<?php echo Yii::app()->request->baseUrl . '/administrador/Cargareportebimstralalumno'?>"> 
                               </form>
 
                         </div>

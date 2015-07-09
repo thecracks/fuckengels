@@ -74,36 +74,36 @@ $(document).ready(function () {
         grado = $(this).attr("id").split("_")[4];
         seccion = $(this).attr("id").split("_")[5];
 
-//        alert(codmatricula);
+        alert(codmatricula);
 
 //        alert("holas");
 
-//        $("#frGeneraReporteBimestral").submit();
+        $("#frGeneraReporteBimestral").submit();
 
-        $("#frGeneraReporteBimestralll").submit();
+//        $("#frGeneraReporteBimestralll").submit();
 
-//        iniciaAnimacionModal();
-//        $.ajax({
-//            type: "POST",
-//            url: 'administrador/ajax_setcodmatricula',
-//            data: {codmatricula: codmatricula, nombre: nombre, nivel: nivel, grado: grado, seccion: seccion},
-//            cache: false,
-//            error: function (jqXHR, textStatus, errorThrown) {
-//                finalizaAnimacion(textStatus);
-//            },
-//            success: function (response) {
-//                alert("llego");
-////                if (response == 'ok')
-////                {
-//                finalizaAnimacion(response);
-//                activaDemaspestaña();
-////                    $('#ifreportebimestra_rna_ad').each(function () {
-////                        this.contentWindow.location.reload(true);
-////                    });
-////                    $("#frGeneraReporteBimestralll").submit();
-////                }
-//            }
-//        });
+        iniciaAnimacionModal();
+        $.ajax({
+            type: "POST",
+            url: 'administrador/ajax_setcodmatricula',
+            data: {codmatricula: codmatricula, nombre: nombre, nivel: nivel, grado: grado, seccion: seccion},
+            cache: false,
+            error: function (jqXHR, textStatus, errorThrown) {
+                finalizaAnimacion(textStatus);
+            },
+            success: function (response) {
+                alert("llego");
+                if (response == 'ok')
+                {
+                    finalizaAnimacion(response);
+                    activaDemaspestaña();
+                    $('#ifreportebimestra_rna_ad').each(function () {
+                        this.contentWindow.location.reload(true);
+                    });
+                    $("#frGeneraReporteBimestralll").submit();
+                }
+            }
+        });
     });
 
     $(document).on("click", "[id='btnimprime_reportebimestral']", function ()

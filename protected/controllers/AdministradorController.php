@@ -2412,6 +2412,8 @@ class AdministradorController extends Controller {
 
     public function actionCargareportebimstralalumno() {
 
+        $_SESSION['codmatricula'] = 62;
+
         if (isset($_SESSION['codmatricula'])) {
 
             $codmatricula = $_SESSION['codmatricula'];
@@ -2454,13 +2456,14 @@ class AdministradorController extends Controller {
                 }
             }
 
-            $this->layout = '//layouts/layout_reportebimestral_alumno'; //
+//            echo 'HOLAS '; 
+//            $this->layout = '//layouts/layout_reportebimestral_alumno';
 //            echo '<pre>';
 //            print_r($arraynasistencias);
 ////            echo '</pre>';
-            $this->render('reportes/reporte_notas_bimestral_alumno', array('datapromedioscursos' => $datapromedioscursos,
-                'datapromediosareas' => $datapromediosareas, 'pbarea' => $arraypbareas, 'arraynasistencias' => $arraynasistencias,
-                'encabezado' => $encabezado, 'arrayefectividadacadem' => $arrayefectividadacadem));
+//            $this->render('reportes/reporte_notas_bimestral_alumno', array('datapromedioscursos' => $datapromedioscursos,
+//                'datapromediosareas' => $datapromediosareas, 'pbarea' => $arraypbareas, 'arraynasistencias' => $arraynasistencias,
+//                'encabezado' => $encabezado, 'arrayefectividadacadem' => $arrayefectividadacadem));
 //
 //            $html2pdf = Yii::app()->ePdf->HTML2PDF();
 //            $html2pdf->setDefaultFont('Times');
@@ -2470,6 +2473,82 @@ class AdministradorController extends Controller {
 //            $html2pdf->Output('rep_matriculas_.pdf', EYiiPdf::OUTPUT_TO_DOWNLOAD);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        $objPHPExcel = new PHPExcel();
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("ENGELS")
+                ->setLastModifiedBy("ENGELS")
+                ->setTitle("REPORTE DE NOTAS")
+                ->setSubject("coming soom")
+                ->setDescription("Test document for YiiExcel, generated using PHP classes.")
+                ->setKeywords("office PHPExcel php YiiExcel UPNFM")
+                ->setCategory("Test result file");
+
+        // Add some data
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1', 'Hello')
+                ->setCellValue('B2', 'world!')
+                ->setCellValue('C1', 'Hello')
+                ->setCellValue('D2', 'world!')
+                ->mergeCells('K1:O1')
+                ->mergeCells('K6:O10')
+                ->setCellValue('K1', 'holas como estan nenas')
+                ->getStyle('K1:O1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+//                ->setCellValue('K6', 'DE NUVO POR ACA')
+//                ->getStyle('K6:O6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+        ;
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('K6', 'DHOLA EN Q ESTAS')
+                ->getStyle('K6:O10')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_JUSTIFY);
+
+        $l = 'A';
+        $n = 20;
+        $iterator = '';
+
+        for ($index = 0; $index < 20; $index++) {
+
+            $l++;
+            $n++;
+
+            $iterator = $l . "" . $n;
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($iterator, 'DHOLA EN Q ESTAS');
+        }
+
+
+        // Miscellaneous glyphs, UTF-8
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A4', 'Miscellaneous glyphs')
+                ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
+
+        // Rename worksheet
+        $objPHPExcel->getActiveSheet()->setTitle('REPORTE DE NOTAS');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        foreach (range('B', 'G') as $columnID) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
+                    ->setAutoSize(true);
+        }
+        // Save a xls file
+        $filename = 'YiiExcel';
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        $objWriter->save('php://output');
+        unset($this->objWriter);
+        unset($this->objWorksheet);
+        unset($this->objReader);
+        unset($this->objPHPExcel);
+        exit();
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////NOTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         ///////////////////// FALTA MEJORAR LOS ESTILOS DEL REPORTE (SALEEN UNO ABAJO DEL OTRO)))
     }
