@@ -19,6 +19,79 @@ class DocenteController extends Controller {
      */
     public function actionIndex() {
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        $objPHPExcel = new PHPExcel();
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("ENGELS")
+                ->setLastModifiedBy("ENGELS")
+                ->setTitle("REPORTE DE NOTAS")
+                ->setSubject("coming soom")
+                ->setDescription("Test document for YiiExcel, generated using PHP classes.")
+                ->setKeywords("office PHPExcel php YiiExcel UPNFM")
+                ->setCategory("Test result file");
+
+        // Add some data
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1', 'Hello')
+                ->setCellValue('B2', 'world!')
+                ->setCellValue('C1', 'Hello')
+                ->setCellValue('D2', 'world!')
+                ->mergeCells('K1:O1')
+                ->mergeCells('K6:O10')
+                ->setCellValue('K1', 'holas como estan nenas')
+                ->getStyle('K1:O1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+//                ->setCellValue('K6', 'DE NUVO POR ACA')
+//                ->getStyle('K6:O6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+        ;
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('K6', 'DHOLA EN Q ESTAS')
+                ->getStyle('K6:O10')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_JUSTIFY);
+
+        $l = 'A';
+        $n = 20;
+        $iterator = '';
+
+        for ($index = 0; $index < 20; $index++) {
+
+            $l++;
+            $n++;
+
+            $iterator = $l . "" . $n;
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($iterator, 'DHOLA EN Q ESTAS');
+        }
+
+
+        // Miscellaneous glyphs, UTF-8
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A4', 'Miscellaneous glyphs')
+                ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
+
+        // Rename worksheet
+        $objPHPExcel->getActiveSheet()->setTitle('REPORTE DE NOTAS');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Save a xls file
+        $filename = 'YiiExcel';
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        $objWriter->save('php://output');
+        unset($this->objWriter);
+        unset($this->objWorksheet);
+        unset($this->objReader);
+        unset($this->objPHPExcel);
+        exit();
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         date_default_timezone_set('America/Lima');
 
         $iddocente = Yii::app()->user->id;
@@ -297,7 +370,7 @@ class DocenteController extends Controller {
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
-        
+
         echo 'ok';
     }
 

@@ -445,7 +445,6 @@ $(document).ready(function () {
                 arrayx = JSON.parse(arrayx);
 //                //console.log(tipo);
 
-
                 if (tipo == "apesos") {
                     arregloP = arrayx;
                     //console.log('apesos');

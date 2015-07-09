@@ -14,6 +14,7 @@ return array(
     'import' => array(
         'application.models.*',
         'application.components.*',
+        'application.vendors.phpexcel.PHPExcel',
     ),
     'modules' => array(
         // uncomment the following to enable the Gii tool
@@ -64,8 +65,6 @@ return array(
                 )
             ),
         ),
-        
-        
         'user' => array(
             // enable cookie-based authentication
             'allowAutoLogin' => true,
@@ -87,7 +86,7 @@ return array(
         ),
         // uncomment the following to use a MySQL database
         'db' => array(
-            'connectionString' => 'mysql:host=localhost;dbname=gestion_academica5',
+            'connectionString' => 'mysql:host=localhost;dbname=gestion_academica',
             'emulatePrepare' => true,
             'username' => 'root',
             'password' => '',
