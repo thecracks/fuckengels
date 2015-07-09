@@ -215,9 +215,9 @@ $(document).ready(function () {
                 nuevafila = parseInt(filaactual) + 1;
             }
 
-            $("input[id$='_FIL-" + nuevafila + "'][id*='" + _id[0] + "']").focus();
-            $("input[id$='_FIL-" + nuevafila + "'][id*='" + _id[0] + "']").select();
-//            console.log($("input[id$='_FIL-" + nuevafila + "'][id*='" + _id[0] + "']"));
+            $("input[id$='_FIL-" + nuevafila + "_'][id*='" + _id[0] + "']").focus();
+            $("input[id$='_FIL-" + nuevafila + "_'][id*='" + _id[0] + "']").select();
+//            //console.log($("input[id$='_FIL-" + nuevafila + "'][id*='" + _id[0] + "']"));
             return;
         }
 
@@ -239,40 +239,48 @@ $(document).ready(function () {
         totalCapacidad = arregloT['C-' + idcapacidad];
         totalBimestre = arregloT['PB'];
 
+        //console.log(idalumno + ' ' + idevaluacion + ' ' + idcapacidad + ' ' + totalBimestre);
+
         sumaproductos = 0;
 
         for (i = 0; i < arregloCC[idcapacidad].length; i++) {
             idcolumna = arregloCC[idcapacidad][i];
-            sumaproductos = parseFloat($("input[id*='CEL-" + idcolumna + "_A-" + idalumno + "']").val() * arregloP[idcolumna]) + sumaproductos;
+            sumaproductos = parseFloat($("input[id*='CEL-" + idcolumna + "_A-" + idalumno + "_']").val() * arregloP[idcolumna]) + sumaproductos;
+            
+            //console.log($("input[id*='CEL-" + idcolumna + "_A-" + idalumno + "_']"));
+            //console.log('valor celda:' + $("input[id*='CEL-" + idcolumna + "_A-" + idalumno + "_']").val() + ' arregloP: ' + arregloP[idcolumna] + ' idcolumna: ' + idcolumna);
+            //console.log('suma productos dentro de for:' + sumaproductos);
         }
 
         promedioCapacidad = sumaproductos / totalCapacidad;
 
-        $("[id*='A-" + idalumno + "_PC-" + idcapacidad + "']").html(promedioCapacidad.toFixed(0));
+        $("[id*='A-" + idalumno + "_PC-" + idcapacidad + "_']").html(promedioCapacidad.toFixed(0));
 
 
         if (promedioCapacidad < 10.5) {
-            $("[id*='A-" + idalumno + "_PC-" + idcapacidad + "']").css("color", "red");
+            $("[id*='A-" + idalumno + "_PC-" + idcapacidad + "_']").css("color", "red");
 
         } else {
-            $("[id*='A-" + idalumno + "_PC-" + idcapacidad + "']").css("color", "blue");
+            $("[id*='A-" + idalumno + "_PC-" + idcapacidad + "_']").css("color", "blue");
         }
 
         sumaproductos = 0;
         for (i = 0; i < arregloCB.length; i++) {
             idcolumna = arregloCB[i];
-            sumaproductos = parseFloat($("[id*='CEL-" + idcolumna + "_A-" + idalumno + "']").html() * arregloP[idcolumna]) + sumaproductos;
+            sumaproductos = parseFloat($("[id*='CEL-" + idcolumna + "_A-" + idalumno + "_']").html() * arregloP[idcolumna]) + sumaproductos;
         }
 
         promedioBimestral = sumaproductos / totalBimestre;
         $("[id*='A-" + idalumno + "_PB']").html(parseInt(promedioBimestral.toFixed(0)));
 
 
-        if (promedioBimestral <= 10) {
+        if (promedioBimestral <= 10.5) {
             $("[id*='A-" + idalumno + "_PB']").css("color", "red");
         } else {
             $("[id*='A-" + idalumno + "_PB']").css("color", "blue");
         }
+
+        //console.log(promedioCapacidad + ' ' + promedioBimestral);
 
     });
 
@@ -324,7 +332,7 @@ $(document).ready(function () {
 
         if (ultimoValor !== valorActual)
         {
-            
+
 //            var time = Math.round(Math.random()*100);
 
 
@@ -375,8 +383,8 @@ $(document).ready(function () {
     ////////////////////////////////////////////////////////////////////////////
 
     function guardaNota(id) {
-         $("#" + id + "").removeClass("saliobien");
-         $("#" + id + "").removeClass("saliomal");
+        $("#" + id + "").removeClass("saliobien");
+        $("#" + id + "").removeClass("saliomal");
         $.ajax({
             type: "POST",
             url: 'docente/ajax_actualiza_nota',
@@ -385,18 +393,18 @@ $(document).ready(function () {
                 idbimestre: idbimestre, idalumno: idalumno, idanio: idanio, nota: nota},
             error: function (jqXHR, textStatus, errorThrown) {
                 $("#" + id + "").addClass("saliomal");
-                console.log("salio mal " + id);
+                //console.log("salio mal " + id);
 //                alert("salio mal");
             },
             success: function (result) {
                 if (result == "ok") {
                     $("#" + id + "").addClass("saliobien");
-                    console.log("salio bien " + id);
+                    //console.log("salio bien " + id);
 
                 } else
                 {
                     $("#" + id + "").addClass("saliomal");
-                    console.log("salio mal " + id);
+                    //console.log("salio mal " + id);
 
                 }
             }
@@ -435,16 +443,25 @@ $(document).ready(function () {
             data: {tipo: tipo},
             success: function (arrayx) {
                 arrayx = JSON.parse(arrayx);
-//                console.log(tipo);
-//                console.log(arrayx);
+//                //console.log(tipo);
+
+
                 if (tipo == "apesos") {
                     arregloP = arrayx;
+                    //console.log('apesos');
+                    //console.log(arrayx);
                 } else if (tipo == "atotales") {
                     arregloT = arrayx;
+                    //console.log('atotales');
+                    //console.log(arrayx);
                 } else if (tipo == "accapacidades") {
                     arregloCC = arrayx;
+                    //console.log('accapacidades');
+                    //console.log(arrayx);
                 } else if (tipo == "acbimestre") {
                     arregloCB = arrayx;
+                    //console.log('acbimestre');
+                    //console.log(arrayx);
                 }
                 contadorControlarrays++;
                 habilitaCamposTabla();

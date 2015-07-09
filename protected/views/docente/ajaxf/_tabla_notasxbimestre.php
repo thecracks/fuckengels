@@ -69,13 +69,13 @@
             }
             if ($arrayCabecera[$idcolu] !== "P" and $arrayCabecera[$idcolu] !== "AN") {
                 ?>
-                <td > <input class="masterTooltip"  title="<?= $arrayCabecera[$idcolu] ?>" id="<?= "CEL-" . $idcolu . "_A-" . $idalumno . "_" . $arrayIdsCabecera[$idcolu] . "_FIL-" . $idfila; ?>" type="text"
+                <td > <input class="masterTooltip"  title="<?= $arrayCabecera[$idcolu] ?>" id="<?= "CEL-" . $idcolu . "_A-" . $idalumno . "_" . $arrayIdsCabecera[$idcolu] . "_FIL-" . $idfila . "_"; ?>" type="text"
                              size="2"   style="<?= $estilo ?>"  value="<?= $arrayDataNuevo[$idfila][$idcolu] ?>" ></input></td>
 
             <?php } else {
                 ?>
 
-                <td class = "tg-031e"> <span id="<?= "CEL-" . $idcolu . "_A-" . $idalumno . "_" . $arrayIdsCabecera[$idcolu]; ?>"   style="<?= $estilo ?>"  value="" ><?= $arrayDataNuevo[$idfila][$idcolu] ?></span></td>
+                <td class = "tg-031e"> <span id="<?= "CEL-" . $idcolu . "_A-" . $idalumno . "_" . $arrayIdsCabecera[$idcolu] . "_"; ?>"   style="<?= $estilo ?>"  value="" ><?= $arrayDataNuevo[$idfila][$idcolu] ?></span></td>
 
                 <?php
             }
