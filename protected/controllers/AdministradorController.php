@@ -2456,14 +2456,14 @@ class AdministradorController extends Controller {
                 }
             }
 
-//            echo 'HOLAS '; 
+//            echo 'HOLAS ';
 //            $this->layout = '//layouts/layout_reportebimestral_alumno';
-//            echo '<pre>';
-//            print_r($arraynasistencias);
-////            echo '</pre>';
+//
 //            $this->render('reportes/reporte_notas_bimestral_alumno', array('datapromedioscursos' => $datapromedioscursos,
 //                'datapromediosareas' => $datapromediosareas, 'pbarea' => $arraypbareas, 'arraynasistencias' => $arraynasistencias,
 //                'encabezado' => $encabezado, 'arrayefectividadacadem' => $arrayefectividadacadem));
+//
+//            return;
 //
 //            $html2pdf = Yii::app()->ePdf->HTML2PDF();
 //            $html2pdf->setDefaultFont('Times');
@@ -2471,104 +2471,341 @@ class AdministradorController extends Controller {
 //                        'datapromediosareas' => $datapromediosareas, 'pbarea' => $arraypbareas, 'arraynasistencias' => $arraynasistencias,
 //                        'encabezado' => $encabezado, 'arrayefectividadacadem' => $arrayefectividadacadem), true));
 //            $html2pdf->Output('rep_matriculas_.pdf', EYiiPdf::OUTPUT_TO_DOWNLOAD);
-        }
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            $objPHPExcel = new PHPExcel();
 
-        $objPHPExcel = new PHPExcel();
+            // Set document properties
+            $objPHPExcel->getProperties()->setCreator("ENGELS")
+                    ->setLastModifiedBy("ENGELS")
+                    ->setTitle("REPORTE DE NOTAS")
+                    ->setSubject("coming soom")
+                    ->setDescription("Test document for YiiExcel, generated using PHP classes.")
+                    ->setKeywords("office PHPExcel php YiiExcel UPNFM")
+                    ->setCategory("Test result file");
 
-        // Set document properties
-        $objPHPExcel->getProperties()->setCreator("ENGELS")
-                ->setLastModifiedBy("ENGELS")
-                ->setTitle("REPORTE DE NOTAS")
-                ->setSubject("coming soom")
-                ->setDescription("Test document for YiiExcel, generated using PHP classes.")
-                ->setKeywords("office PHPExcel php YiiExcel UPNFM")
-                ->setCategory("Test result file");
+            // Add some data
+            //GENERANDO LA PRIMERA TABLA 
 
-        // Add some data
-        
-        $cellini1='A7';
-        
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->mergeCells('A7:A8');
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A1', 'Hello')
-                ->setCellValue('B2', 'world!')
-                ->setCellValue('C1', 'Hello')
-                ->setCellValue('D2', 'world!')
-                ->mergeCells('K1:O1')
-                ->mergeCells('K6:O10')
-                ->setCellValue('K1', 'holas como estan nenas')
-                ->getStyle('K1:O1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
-//                ->setCellValue('K6', 'DE NUVO POR ACA')
-//                ->getStyle('K6:O6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
-        ;
 
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('K6', 'DHOLA EN Q ESTAS')
-                ->getStyle('K6:O10')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_JUSTIFY);
+            $col = 65; //A
+            $fil = 7;
 
-        $l = 'A';
-        $n = 20;
-        $iterator = '';
 
-        for ($index = 0; $index < 20; $index++) {
 
-            $l++;
-            $n++;
+//function cellColor($cells, $colorfondo, $colorletra, $tamletra,$bold, $obj)
+            $objPHPExcel->getActiveSheet()->getCell('O60')->setValue('estp va primero');
 
-            $iterator = $l . "" . $n;
+            $this->cellColor('O60', '902546', '546935', 10, true,'j', $objPHPExcel);
+            $objPHPExcel->getActiveSheet()->getCell('O65')->setValue('ESTO VA DESPUES');
+
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue($iterator, 'DHOLA EN Q ESTAS');
+                    ->mergeCells(chr($col) . $fil . ':' . chr($col) . ($fil + 1))
+                    ->setCellValue(chr($col) . $fil, 'PROMEDIO POR CURSO')
+            ;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($col + 1) . $fil . ':' . chr($col + 4) . $fil)
+                    ->setCellValue(chr($col + 1) . $fil . '', 'BIMESTRE')
+            ;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue(chr($col + 1) . ($fil + 1), '1°')
+                    ->setCellValue(chr($col + 2) . ($fil + 1), '2°')
+                    ->setCellValue(chr($col + 3) . ($fil + 1), '3°')
+                    ->setCellValue(chr($col + 4) . ($fil + 1), '4°')
+            ;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($col + 5) . $fil . ':' . chr($col + 5) . ($fil + 1))
+                    ->setCellValue(chr($col + 5) . $fil, 'PROMEDIO FINAL')
+            ;
+
+            //////////////////////////////DATAAAAA
+            $colaux = $col;
+            $fil = $fil + 2;
+            foreach ($datapromedioscursos as $fila) {
+                $col = $colaux;
+                foreach ($fila as $key => $value) {
+                    if ($key != 'idcurso') {
+                        $objPHPExcel->setActiveSheetIndex(0)
+                                ->setCellValue(chr($col) . $fil, $value);
+                        $col++;
+                    }
+                }
+                $fil++;
+            }
+
+
+            ///////////////////////////////////////////////////////////
+            //SEGUNDA TABLA
+            ///////////////////////////////////////////////////////////
+            $col2 = 65 + 7;
+            $fil2 = 7;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($col2) . $fil2 . ':' . chr($col2 + 1) . ($fil2 + 1))
+                    ->setCellValue(chr($col2) . $fil2, 'CONTROL ASISTENCIA')
+            ;
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($col2 + 2) . $fil2 . ':' . chr($col2 + 5) . $fil2)
+                    ->setCellValue(chr($col2 + 2) . $fil2 . '', 'BIMESTRE')
+            ;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue(chr($col2 + 2) . ($fil2 + 1), '1°')
+                    ->setCellValue(chr($col2 + 3) . ($fil2 + 1), '2°')
+                    ->setCellValue(chr($col2 + 4) . ($fil2 + 1), '3°')
+                    ->setCellValue(chr($col2 + 5) . ($fil2 + 1), '4°')
+            ;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($col2 + 6) . $fil2 . ':' . chr($col2 + 6) . ($fil2 + 1))
+                    ->setCellValue(chr($col2 + 6) . $fil2, 'TOTAL')
+            ;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($col2) . ($fil2 + 2) . ':' . chr($col2) . ($fil2 + 3))
+                    ->setCellValue(chr($col2) . ($fil2 + 2), 'TARDANZAS')
+                    ->mergeCells(chr($col2) . ($fil2 + 4) . ':' . chr($col2) . ($fil2 + 5))
+                    ->setCellValue(chr($col2) . ($fil2 + 4), 'INASISTENCIAS')
+            ;
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue(chr($col2 + 1) . ($fil2 + 2), 'JUSTIFICADA')
+                    ->setCellValue(chr($col2 + 1) . ($fil2 + 3), 'INJUSTIFICADA')
+                    ->setCellValue(chr($col2 + 1) . ($fil2 + 4), 'JUSTIFICADA')
+                    ->setCellValue(chr($col2 + 1) . ($fil2 + 5), 'INJUSTIFICADA')
+            ;
+
+            /////////////////////////////////////////////////////////////
+            //DATAAAAAAAAAAAAAAAAA SGUNDA TABLAAAAAAAAAAA
+            /////////////////////////////////////////////////////////////
+            $colaux = $col2 + 2;
+            $fil2 = $fil2 + 2;
+            foreach ($arraynasistencias as $key => $fila) {
+                $col2 = $colaux;
+                if ($key != "Bimestre" && $key != "Asistencia") {
+                    foreach ($fila as $value) {
+                        $objPHPExcel->setActiveSheetIndex(0)
+                                ->setCellValue(chr($col2) . $fil2, $value);
+                        $col2++;
+                    }
+                    $fil2++;
+                }
+            }
+
+            ///////////////////////////////////////////////////////////////////
+            //TERCERA TABLAAAAAAAAAAAAAAAAAAAAAAAAA
+            ///////////////////////////////////////////////////////////////////
+            $col3 = 65 + 7; //A
+            $fil3 = 15;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($col3) . $fil3 . ':' . chr($col3 + 1) . ($fil3 + 1))
+                    ->setCellValue(chr($col3) . $fil3, 'PROMEDIO POR AREA')
+            ;
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($col3 + 2) . $fil3 . ':' . chr($col3 + 5) . $fil3)
+                    ->setCellValue(chr($col3 + 2) . $fil3 . '', 'BIMESTRE')
+            ;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue(chr($col3 + 2) . ($fil3 + 1), '1°')
+                    ->setCellValue(chr($col3 + 3) . ($fil3 + 1), '2°')
+                    ->setCellValue(chr($col3 + 4) . ($fil3 + 1), '3°')
+                    ->setCellValue(chr($col3 + 5) . ($fil3 + 1), '4°')
+            ;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($col3 + 6) . $fil3 . ':' . chr($col3 + 6) . ($fil3 + 1))
+                    ->setCellValue(chr($col3 + 6) . $fil3, 'PROMEDIO')
+            ;
+
+            ///////////////////////////////////////////////////////////////////
+            //DATA TERCERA TABLA
+            ///////////////////////////////////////////////////////////////////
+            $colaux = $col3;
+            $fil3 = $fil3 + 2;
+            foreach ($datapromediosareas as $index => $fila) {
+                $col3 = $colaux;
+                foreach ($fila as $key => $value) {
+                    if ($key != "idarea") {
+                        $objPHPExcel->setActiveSheetIndex(0)
+                                ->setCellValue(chr($col3) . $fil3, $value);
+                        if ($key == "area") {
+                            $objPHPExcel->setActiveSheetIndex(0)
+                                    ->mergeCells(chr($col3) . $fil3 . ':' . chr($col3 + 1) . ($fil3));
+                            $col3++;
+                        }
+                        $col3++;
+                    }
+                }
+
+                $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue(chr($col3) . $fil3, $arraypbareas[$index]);
+                $fil3++;
+            }
+
+            //
+            //$arrayefectividadacadem
+            //
+            
+              ///////////////////////////////////////////////////////////////////
+            //CUARTAAAAAAAAAA TABLAAAAAAAAAAAAAAAAAAAAAAAAA
+            ///////////////////////////////////////////////////////////////////
+            $col4 = 65 + 7; //A
+            $fil4 = $fil3 + 2;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($col4) . $fil4 . ':' . chr($col4 + 1) . ($fil4 + 1))
+                    ->setCellValue(chr($col4) . $fil4, 'EFECTIVIDAD ACADÉMICA')
+            ;
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($col4 + 2) . $fil4 . ':' . chr($col4 + 5) . $fil4)
+                    ->setCellValue(chr($col4 + 2) . $fil4 . '', 'BIMESTRE')
+            ;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue(chr($col4 + 2) . ($fil4 + 1), '1°')
+                    ->setCellValue(chr($col4 + 3) . ($fil4 + 1), '2°')
+                    ->setCellValue(chr($col4 + 4) . ($fil4 + 1), '3°')
+                    ->setCellValue(chr($col4 + 5) . ($fil4 + 1), '4°')
+            ;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($col4 + 6) . $fil4 . ':' . chr($col4 + 6) . ($fil4 + 1))
+                    ->setCellValue(chr($col4 + 6) . $fil4, 'PROMEDIO')
+            ;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($col4) . ( $fil4 + 2) . ':' . chr($col4 + 1) . ($fil4 + 2))
+                    ->setCellValue(chr($col4) . ( $fil4 + 2), 'Comportamiento')
+                    ->mergeCells(chr($col4) . ($fil4 + 3) . ':' . chr($col4 + 1) . ($fil4 + 3))
+                    ->setCellValue(chr($col4) . ($fil4 + 3), 'Orden de Mérito');
+
+
+            ///////////////////////////////////////////////////////////////////
+            //DATA CUARTAAAAAAAAAA TABLA
+            ///////////////////////////////////////////////////////////////////
+//            echo '<pre>';
+//            print_r(
+//                    $arrayefectividadacadem);
+//            echo '<pre>';
+////
+//            return;
+            $colaux = $col4 + 2;
+            $fil4 = $fil4 + 2;
+            foreach ($arrayefectividadacadem as $index => $fila) {
+                $col4 = $colaux;
+                foreach ($fila as $value) {
+                    $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue(chr($col4) . $fil4, $value);
+                    $col4++;
+                }
+                $fil4++;
+            }
+            //
+//        $objPHPExcel->setActiveSheetIndex(0)
+//                ->getStyle('K1:O1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+////                ->setCellValue('K6', 'DE NUVO POR ACA')
+////                ->getStyle('K6:O6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+//        ;
+//
+//            $objPHPExcel->setActiveSheetIndex(0)
+//                    ->setCellValue('K6', 'DHOLA EN Q ESTAS')
+//                    ->getStyle('K6:O10')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_JUSTIFY);
+            // Rename worksheet
+            $objPHPExcel->getActiveSheet()->setTitle('REPORTE DE NOTAS');
+
+            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $objPHPExcel->setActiveSheetIndex(0);
+
+//        // Save a xls file
+            $filename = 'YiiExcel';
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
+            header('Cache-Control: max-age=0');
+
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+            $objWriter->save('php://output');
+            unset($this->objWriter);
+            unset($this->objWorksheet);
+            unset($this->objReader);
+            unset($this->objPHPExcel);
+            exit();
         }
-
-
-        // Miscellaneous glyphs, UTF-8
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A4', 'Miscellaneous glyphs')
-                ->setCellValue('A5', 'éàèùâêîôûëïüÿäöüç');
-
-        // Rename worksheet
-        $objPHPExcel->getActiveSheet()->setTitle('REPORTE DE NOTAS');
-
-        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-        $objPHPExcel->setActiveSheetIndex(0);
-
-        foreach (range('B', 'G') as $columnID) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
-                    ->setAutoSize(true);
-        }
-        // Save a xls file
-        $filename = 'YiiExcel';
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
-        header('Cache-Control: max-age=0');
-
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-
-        $objWriter->save('php://output');
-        unset($this->objWriter);
-        unset($this->objWorksheet);
-        unset($this->objReader);
-        unset($this->objPHPExcel);
-        exit();
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////NOTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         ///////////////////// FALTA MEJORAR LOS ESTILOS DEL REPORTE (SALEEN UNO ABAJO DEL OTRO)))
+    }
+
+    private function cellColor($cells, $colorfondo, $colorletra, $tamletra, $bold, $alineacion, $obj) {
+        $aling = NULL;
+        if ($alineacion == 'd') {
+            $aling = PHPExcel_Style_Alignment::HORIZONTAL_RIGHT;
+        } else if ($alineacion == 'c') {
+            $aling = PHPExcel_Style_Alignment::HORIZONTAL_CENTER_CONTINUOUS;
+        } if ($alineacion == 'i') {
+            $aling = PHPExcel_Style_Alignment::HORIZONTAL_LEFT;
+        } if ($alineacion == 'j') {
+            $aling = PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY;
+        } else
+            $aling = 0;
+
+
+        $styleArray = array(
+            'font' => array(
+                'bold' => $bold,
+                'color' => array('rgb' => $colorletra),
+                'size' => $tamletra,
+                'name' => 'Verdana',
+                'rotation' => 90
+            ),
+            'alignment' => array(
+                'horizontal' => 9 > 3 ? PHPExcel_Style_Alignment::HORIZONTAL_LEFT : PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+            ),
+            'borders' => array(
+                'top' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                ),
+                'left' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                ),
+                'right' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                ),
+                'bottom' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                ),
+            ),
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' => $colorfondo
+                ),
+            ),
+        );
+
+        $obj->getActiveSheet()->getStyle($cells)->applyFromArray($styleArray);
+
+//        $obj->getActiveSheet()->getStyle($cells)->getFill()->applyFromArray(array(
+//            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+//            'startcolor' => array(
+//                'rgb' => $colorfondo
+//            )
+//        ));
+//
+//        $styleArray = array(
+//            'font' => array(
+//                'bold' => $bold,
+//                'color' => array('rgb' => $colorletra),
+//                'size' => $tamletra,
+//                'name' => 'Verdana'
+//            ),
+//        );
+//
+//        $obj->getActiveSheet()->getStyle($cells)->applyFromArray($styleArray);
     }
 
     ///////////////////////////////////////////////////

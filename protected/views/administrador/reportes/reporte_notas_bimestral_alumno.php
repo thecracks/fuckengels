@@ -127,7 +127,7 @@
                 </tr>
             </table>
         </div><br>
-        
+
 
         <div class="row">
 
@@ -159,12 +159,10 @@
 
                             $estilo = '';
 
-                            if ($key != 'area') {
-                                if ($celda <= 10) {
-                                    $estilo = 'class="notadesaprobatoria"';
-                                } else if ($celda <= 20) {
-                                    $estilo = 'class="notaaprobatoria"';
-                                }
+                            if ($celda <= 10) {
+                                $estilo = 'class="notadesaprobatoria"';
+                            } else if ($celda <= 20) {
+                                $estilo = 'class="notaaprobatoria"';
                             }
                             echo '<td ' . $estilo . '>' . $celda . '</td>';
                         }
