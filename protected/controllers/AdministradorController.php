@@ -2484,6 +2484,11 @@ class AdministradorController extends Controller {
                     ->setKeywords("office PHPExcel php YiiExcel UPNFM")
                     ->setCategory("Test result file");
 
+            //COLORES FUENTES
+
+            $negro = '000000';
+            $blanco = 'FFFFFF';
+
             // Add some data
             //GENERANDO LA PRIMERA TABLA 
 
@@ -2492,29 +2497,22 @@ class AdministradorController extends Controller {
             $fil = 7;
 
 
-
-//function cellColor($cells, $colorfondo, $colorletra, $tamletra,$bold, $obj)
-//            $objPHPExcel->getActiveSheet()->getCell('O60')->setValue('estp va primero');
-//
-//            $this->cellColor('O60', '902546', '546935', 10, true, 'j', $objPHPExcel);
-//            $objPHPExcel->getActiveSheet()->getCell('O65')->setValue('ESTO VA DESPUES');
-
-
-
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col) . $fil . ':' . chr($col) . ($fil + 1))
                     ->setCellValue(chr($col) . $fil, 'PROMEDIO POR CURSO')
             ;
-            $this->setAnchoColumna(chr($col), true, $objPHPExcel);
-            $this->cellColor(chr($col) . $fil . ':' . chr($col) . ($fil + 1), 'FFFFFF', '000000', 8, true, 'c', $objPHPExcel);
-
-
+            $this->setAnchoColumna(chr($col), 40, $objPHPExcel);
+            $this->cellColor(chr($col) . $fil . ':' . chr($col) . ($fil + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col + 1) . $fil . ':' . chr($col + 4) . $fil)
                     ->setCellValue(chr($col + 1) . $fil . '', 'BIMESTRE')
             ;
 
+            $this->setAnchoColumna(chr($col + 1), 3, $objPHPExcel);
+            $this->setAnchoColumna(chr($col + 2), 3, $objPHPExcel);
+            $this->setAnchoColumna(chr($col + 3), 3, $objPHPExcel);
+            $this->setAnchoColumna(chr($col + 4), 3, $objPHPExcel);
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue(chr($col + 1) . ($fil + 1), '1°')
                     ->setCellValue(chr($col + 2) . ($fil + 1), '2°')
@@ -2752,7 +2750,7 @@ class AdministradorController extends Controller {
         if ($alineacion == 'd') {
             $aling = PHPExcel_Style_Alignment::HORIZONTAL_RIGHT;
         } else if ($alineacion == 'c') {
-            $aling = PHPExcel_Style_Alignment::HORIZONTAL_CENTER_CONTINUOUS;
+            $aling = PHPExcel_Style_Alignment::HORIZONTAL_CENTER;
         } if ($alineacion == 'i') {
             $aling = PHPExcel_Style_Alignment::HORIZONTAL_LEFT;
         } if ($alineacion == 'j') {
@@ -2789,7 +2787,7 @@ class AdministradorController extends Controller {
     }
 
     private function setAnchoColumna($col, $size, $obj) {
-        if ($size == true) {
+        if ($size == 0) {
             $obj->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
         } else {
             $obj->getActiveSheet()->getColumnDimension($col)->setWidth($size);
