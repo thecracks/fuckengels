@@ -2494,15 +2494,21 @@ class AdministradorController extends Controller {
 
 
 //function cellColor($cells, $colorfondo, $colorletra, $tamletra,$bold, $obj)
-            $objPHPExcel->getActiveSheet()->getCell('O60')->setValue('estp va primero');
+//            $objPHPExcel->getActiveSheet()->getCell('O60')->setValue('estp va primero');
+//
+//            $this->cellColor('O60', '902546', '546935', 10, true, 'j', $objPHPExcel);
+//            $objPHPExcel->getActiveSheet()->getCell('O65')->setValue('ESTO VA DESPUES');
 
-            $this->cellColor('O60', '902546', '546935', 10, true,'j', $objPHPExcel);
-            $objPHPExcel->getActiveSheet()->getCell('O65')->setValue('ESTO VA DESPUES');
+
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col) . $fil . ':' . chr($col) . ($fil + 1))
                     ->setCellValue(chr($col) . $fil, 'PROMEDIO POR CURSO')
             ;
+            $this->setAnchoColumna(chr($col), true, $objPHPExcel);
+            $this->cellColor(chr($col) . $fil . ':' . chr($col) . ($fil + 1), 'FFFFFF', '000000', 8, true, 'c', $objPHPExcel);
+
+
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col + 1) . $fil . ':' . chr($col + 4) . $fil)
@@ -2729,6 +2735,7 @@ class AdministradorController extends Controller {
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 
             $objWriter->save('php://output');
+
             unset($this->objWriter);
             unset($this->objWorksheet);
             unset($this->objReader);
@@ -2763,19 +2770,10 @@ class AdministradorController extends Controller {
                 'rotation' => 90
             ),
             'alignment' => array(
-                'horizontal' => 9 > 3 ? PHPExcel_Style_Alignment::HORIZONTAL_LEFT : PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+                'horizontal' => $aling,
             ),
             'borders' => array(
-                'top' => array(
-                    'style' => PHPExcel_Style_Border::BORDER_THIN,
-                ),
-                'left' => array(
-                    'style' => PHPExcel_Style_Border::BORDER_THIN,
-                ),
-                'right' => array(
-                    'style' => PHPExcel_Style_Border::BORDER_THIN,
-                ),
-                'bottom' => array(
+                'outline' => array(
                     'style' => PHPExcel_Style_Border::BORDER_THIN,
                 ),
             ),
@@ -2788,24 +2786,14 @@ class AdministradorController extends Controller {
         );
 
         $obj->getActiveSheet()->getStyle($cells)->applyFromArray($styleArray);
+    }
 
-//        $obj->getActiveSheet()->getStyle($cells)->getFill()->applyFromArray(array(
-//            'type' => PHPExcel_Style_Fill::FILL_SOLID,
-//            'startcolor' => array(
-//                'rgb' => $colorfondo
-//            )
-//        ));
-//
-//        $styleArray = array(
-//            'font' => array(
-//                'bold' => $bold,
-//                'color' => array('rgb' => $colorletra),
-//                'size' => $tamletra,
-//                'name' => 'Verdana'
-//            ),
-//        );
-//
-//        $obj->getActiveSheet()->getStyle($cells)->applyFromArray($styleArray);
+    private function setAnchoColumna($col, $size, $obj) {
+        if ($size == true) {
+            $obj->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+        } else {
+            $obj->getActiveSheet()->getColumnDimension($col)->setWidth($size);
+        }
     }
 
     ///////////////////////////////////////////////////
