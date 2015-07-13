@@ -2488,6 +2488,8 @@ class AdministradorController extends Controller {
 
             $negro = '000000';
             $blanco = 'FFFFFF';
+            $rojo = 'FF0000';
+            $azul = '0000FF';
 
             // Add some data
             //GENERANDO LA PRIMERA TABLA 
@@ -2496,18 +2498,18 @@ class AdministradorController extends Controller {
             $col = 65; //A
             $fil = 7;
 
-
+            $this->setAnchoColumna(chr($col), 40, $objPHPExcel);
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col) . $fil . ':' . chr($col) . ($fil + 1))
                     ->setCellValue(chr($col) . $fil, 'PROMEDIO POR CURSO')
             ;
-            $this->setAnchoColumna(chr($col), 40, $objPHPExcel);
             $this->cellColor(chr($col) . $fil . ':' . chr($col) . ($fil + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col + 1) . $fil . ':' . chr($col + 4) . $fil)
-                    ->setCellValue(chr($col + 1) . $fil . '', 'BIMESTRE')
-            ;
+                    ->setCellValue(chr($col + 1) . $fil . '', 'BIMESTRE');
+            $this->cellColor(chr($col + 1) . $fil . ':' . chr($col + 4) . $fil, $blanco, $negro, 8, true, 'c', $objPHPExcel);
+
 
             $this->setAnchoColumna(chr($col + 1), 3, $objPHPExcel);
             $this->setAnchoColumna(chr($col + 2), 3, $objPHPExcel);
@@ -2517,13 +2519,17 @@ class AdministradorController extends Controller {
                     ->setCellValue(chr($col + 1) . ($fil + 1), '1°')
                     ->setCellValue(chr($col + 2) . ($fil + 1), '2°')
                     ->setCellValue(chr($col + 3) . ($fil + 1), '3°')
-                    ->setCellValue(chr($col + 4) . ($fil + 1), '4°')
-            ;
+                    ->setCellValue(chr($col + 4) . ($fil + 1), '4°');
+            $this->cellColor(chr($col + 1) . ($fil + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col + 2) . ($fil + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col + 3) . ($fil + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col + 4) . ($fil + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
 
+            $this->setAnchoColumna(chr($col + 5), 5, $objPHPExcel);
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col + 5) . $fil . ':' . chr($col + 5) . ($fil + 1))
-                    ->setCellValue(chr($col + 5) . $fil, 'PROMEDIO FINAL')
-            ;
+                    ->setCellValue(chr($col + 5) . $fil, 'PROM.');
+            $this->cellColor(chr($col + 5) . $fil . ':' . chr($col + 5) . ($fil + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
 
             //////////////////////////////DATAAAAA
             $colaux = $col;
@@ -2532,6 +2538,11 @@ class AdministradorController extends Controller {
                 $col = $colaux;
                 foreach ($fila as $key => $value) {
                     if ($key != 'idcurso') {
+                        if (is_numeric($value)) {
+                            $this->cellColor(chr($col) . $fil, $blanco, ((floatval($value) >= 10.5 ) ? $azul : $rojo), 8, true, 'c', $objPHPExcel);
+                        } else {
+                            $this->cellColor(chr($col) . $fil, $blanco, $negro, 8, false, 'i', $objPHPExcel);
+                        }
                         $objPHPExcel->setActiveSheetIndex(0)
                                 ->setCellValue(chr($col) . $fil, $value);
                         $col++;
@@ -2544,42 +2555,64 @@ class AdministradorController extends Controller {
             ///////////////////////////////////////////////////////////
             //SEGUNDA TABLA
             ///////////////////////////////////////////////////////////
-            $col2 = 65 + 7;
+            $col2 = 65 + 7; //H
             $fil2 = 7;
 
+//           
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col2) . $fil2 . ':' . chr($col2 + 1) . ($fil2 + 1))
-                    ->setCellValue(chr($col2) . $fil2, 'CONTROL ASISTENCIA')
-            ;
+                    ->setCellValue(chr($col2) . $fil2, 'CONTROL ASISTENCIA');
+            $this->cellColor(chr($col2) . $fil2 . ':' . chr($col2 + 1) . ($fil2 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+
+
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col2 + 2) . $fil2 . ':' . chr($col2 + 5) . $fil2)
-                    ->setCellValue(chr($col2 + 2) . $fil2 . '', 'BIMESTRE')
-            ;
+                    ->setCellValue(chr($col2 + 2) . $fil2, 'BIMESTRE');
+            $this->cellColor(chr($col2 + 2) . $fil2 . ':' . chr($col2 + 5) . $fil2, $blanco, $negro, 8, true, 'c', $objPHPExcel);
 
+            $this->setAnchoColumna(chr($col2 + 2), 3, $objPHPExcel);
+            $this->setAnchoColumna(chr($col2 + 3), 3, $objPHPExcel);
+            $this->setAnchoColumna(chr($col2 + 4), 3, $objPHPExcel);
+            $this->setAnchoColumna(chr($col2 + 5), 3, $objPHPExcel);
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue(chr($col2 + 2) . ($fil2 + 1), '1°')
                     ->setCellValue(chr($col2 + 3) . ($fil2 + 1), '2°')
                     ->setCellValue(chr($col2 + 4) . ($fil2 + 1), '3°')
-                    ->setCellValue(chr($col2 + 5) . ($fil2 + 1), '4°')
-            ;
+                    ->setCellValue(chr($col2 + 5) . ($fil2 + 1), '4°');
+            $this->cellColor(chr($col2 + 2) . ($fil2 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col2 + 3) . ($fil2 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col2 + 4) . ($fil2 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col2 + 5) . ($fil2 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
 
+            $this->setAnchoColumna(chr($col2 + 6), 5, $objPHPExcel);
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col2 + 6) . $fil2 . ':' . chr($col2 + 6) . ($fil2 + 1))
-                    ->setCellValue(chr($col2 + 6) . $fil2, 'TOTAL')
-            ;
+                    ->setCellValue(chr($col2 + 6) . $fil2, 'TOTAL');
+            $this->cellColor(chr($col2 + 6) . $fil2 . ':' . chr($col2 + 6) . ($fil2 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
 
+            $this->setAnchoColumna(chr($col2), 20, $objPHPExcel);
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col2) . ($fil2 + 2) . ':' . chr($col2) . ($fil2 + 3))
                     ->setCellValue(chr($col2) . ($fil2 + 2), 'TARDANZAS')
                     ->mergeCells(chr($col2) . ($fil2 + 4) . ':' . chr($col2) . ($fil2 + 5))
-                    ->setCellValue(chr($col2) . ($fil2 + 4), 'INASISTENCIAS')
-            ;
+                    ->setCellValue(chr($col2) . ($fil2 + 4), 'INASISTENCIAS');
+            $this->cellColor(chr($col2) . ($fil2 + 2) . ':' . chr($col2) . ($fil2 + 3), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col2) . ($fil2 + 4) . ':' . chr($col2) . ($fil2 + 5), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+
+
+            $this->setAnchoColumna(chr($col2 + 1), 20, $objPHPExcel);
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue(chr($col2 + 1) . ($fil2 + 2), 'JUSTIFICADA')
                     ->setCellValue(chr($col2 + 1) . ($fil2 + 3), 'INJUSTIFICADA')
                     ->setCellValue(chr($col2 + 1) . ($fil2 + 4), 'JUSTIFICADA')
-                    ->setCellValue(chr($col2 + 1) . ($fil2 + 5), 'INJUSTIFICADA')
-            ;
+                    ->setCellValue(chr($col2 + 1) . ($fil2 + 5), 'INJUSTIFICADA');
+            $this->cellColor(chr($col2 + 1) . ($fil2 + 2), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col2 + 1) . ($fil2 + 3), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col2 + 1) . ($fil2 + 4), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col2 + 1) . ($fil2 + 5), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+
+
+
 
             /////////////////////////////////////////////////////////////
             //DATAAAAAAAAAAAAAAAAA SGUNDA TABLAAAAAAAAAAA
@@ -2592,7 +2625,9 @@ class AdministradorController extends Controller {
                     foreach ($fila as $value) {
                         $objPHPExcel->setActiveSheetIndex(0)
                                 ->setCellValue(chr($col2) . $fil2, $value);
+                        $this->cellColor(chr($col2) . $fil2, $blanco, $negro, 8, false, 'c', $objPHPExcel);
                         $col2++;
+                        $this->cellColor(chr($col2) . $fil2, $blanco, $negro, 8, false, 'c', $objPHPExcel);
                     }
                     $fil2++;
                 }
@@ -2601,29 +2636,34 @@ class AdministradorController extends Controller {
             ///////////////////////////////////////////////////////////////////
             //TERCERA TABLAAAAAAAAAAAAAAAAAAAAAAAAA
             ///////////////////////////////////////////////////////////////////
-            $col3 = 65 + 7; //A
+            $col3 = 65 + 7; //H
             $fil3 = 15;
+
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col3) . $fil3 . ':' . chr($col3 + 1) . ($fil3 + 1))
-                    ->setCellValue(chr($col3) . $fil3, 'PROMEDIO POR AREA')
-            ;
+                    ->setCellValue(chr($col3) . $fil3, 'PROMEDIO POR AREA');
+            $this->cellColor(chr($col3) . $fil3 . ':' . chr($col3 + 1) . ($fil3 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col3 + 2) . $fil3 . ':' . chr($col3 + 5) . $fil3)
-                    ->setCellValue(chr($col3 + 2) . $fil3 . '', 'BIMESTRE')
-            ;
+                    ->setCellValue(chr($col3 + 2) . $fil3 . '', 'BIMESTRE');
+            $this->cellColor(chr($col3 + 2) . $fil3 . ':' . chr($col3 + 5) . $fil3, $blanco, $negro, 8, true, 'c', $objPHPExcel);
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue(chr($col3 + 2) . ($fil3 + 1), '1°')
                     ->setCellValue(chr($col3 + 3) . ($fil3 + 1), '2°')
                     ->setCellValue(chr($col3 + 4) . ($fil3 + 1), '3°')
-                    ->setCellValue(chr($col3 + 5) . ($fil3 + 1), '4°')
-            ;
+                    ->setCellValue(chr($col3 + 5) . ($fil3 + 1), '4°');
+            $this->cellColor(chr($col3 + 2) . ($fil3 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col3 + 3) . ($fil3 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col3 + 4) . ($fil3 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col3 + 5) . ($fil3 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col3 + 6) . $fil3 . ':' . chr($col3 + 6) . ($fil3 + 1))
-                    ->setCellValue(chr($col3 + 6) . $fil3, 'PROMEDIO')
-            ;
+                    ->setCellValue(chr($col3 + 6) . $fil3, 'PROM');
+            $this->cellColor(chr($col3 + 6) . $fil3 . ':' . chr($col3 + 6) . ($fil3 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
 
             ///////////////////////////////////////////////////////////////////
             //DATA TERCERA TABLA
@@ -2639,7 +2679,10 @@ class AdministradorController extends Controller {
                         if ($key == "area") {
                             $objPHPExcel->setActiveSheetIndex(0)
                                     ->mergeCells(chr($col3) . $fil3 . ':' . chr($col3 + 1) . ($fil3));
+                            $this->cellColor(chr($col3) . $fil3 . ':' . chr($col3 + 1) . ($fil3), $blanco, $negro, 8, false, 'i', $objPHPExcel);
                             $col3++;
+                        } else {
+                            $this->cellColor(chr($col3) . $fil3, $blanco, ((floatval($value) >= 10.5 ) ? $azul : $rojo), 8, true, 'c', $objPHPExcel);
                         }
                         $col3++;
                     }
@@ -2647,56 +2690,60 @@ class AdministradorController extends Controller {
 
                 $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue(chr($col3) . $fil3, $arraypbareas[$index]);
+                $this->cellColor(chr($col3) . $fil3, $blanco, ((floatval($arraypbareas[$index]) >= 10.5 ) ? $azul : $rojo), 8, true, 'c', $objPHPExcel);
+
                 $fil3++;
             }
-
             //
-            //$arrayefectividadacadem
-            //
-            
-              ///////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////
             //CUARTAAAAAAAAAA TABLAAAAAAAAAAAAAAAAAAAAAAAAA
             ///////////////////////////////////////////////////////////////////
-            $col4 = 65 + 7; //A
+            $col4 = 65 + 7; //H
             $fil4 = $fil3 + 2;
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col4) . $fil4 . ':' . chr($col4 + 1) . ($fil4 + 1))
-                    ->setCellValue(chr($col4) . $fil4, 'EFECTIVIDAD ACADÉMICA')
-            ;
+                    ->setCellValue(chr($col4) . $fil4, 'EFECTIVIDAD ACADÉMICA');
+            $this->cellColor(chr($col4) . $fil4 . ':' . chr($col4 + 1) . ($fil4 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+
+
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col4 + 2) . $fil4 . ':' . chr($col4 + 5) . $fil4)
-                    ->setCellValue(chr($col4 + 2) . $fil4 . '', 'BIMESTRE')
-            ;
+                    ->setCellValue(chr($col4 + 2) . $fil4 . '', 'BIMESTRE');
+            $this->cellColor(chr($col4 + 2) . $fil4 . ':' . chr($col4 + 5) . $fil4, $blanco, $negro, 8, true, 'c', $objPHPExcel);
+
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue(chr($col4 + 2) . ($fil4 + 1), '1°')
                     ->setCellValue(chr($col4 + 3) . ($fil4 + 1), '2°')
                     ->setCellValue(chr($col4 + 4) . ($fil4 + 1), '3°')
-                    ->setCellValue(chr($col4 + 5) . ($fil4 + 1), '4°')
-            ;
+                    ->setCellValue(chr($col4 + 5) . ($fil4 + 1), '4°');
+            $this->cellColor(chr($col4 + 2) . ($fil4 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col4 + 3) . ($fil4 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col4 + 4) . ($fil4 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col4 + 5) . ($fil4 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+
+
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col4 + 6) . $fil4 . ':' . chr($col4 + 6) . ($fil4 + 1))
-                    ->setCellValue(chr($col4 + 6) . $fil4, 'PROMEDIO')
-            ;
+                    ->setCellValue(chr($col4 + 6) . $fil4, 'PROM');
+            $this->cellColor(chr($col4 + 6) . $fil4 . ':' . chr($col4 + 6) . ($fil4 + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+
 
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col4) . ( $fil4 + 2) . ':' . chr($col4 + 1) . ($fil4 + 2))
                     ->setCellValue(chr($col4) . ( $fil4 + 2), 'Comportamiento')
                     ->mergeCells(chr($col4) . ($fil4 + 3) . ':' . chr($col4 + 1) . ($fil4 + 3))
                     ->setCellValue(chr($col4) . ($fil4 + 3), 'Orden de Mérito');
+            $this->cellColor(chr($col4) . ( $fil4 + 2) . ':' . chr($col4 + 1) . ($fil4 + 2), $blanco, $negro, 8, true, 'c', $objPHPExcel);
+            $this->cellColor(chr($col4) . ($fil4 + 3) . ':' . chr($col4 + 1) . ($fil4 + 3), $blanco, $negro, 8, true, 'c', $objPHPExcel);
 
 
             ///////////////////////////////////////////////////////////////////
             //DATA CUARTAAAAAAAAAA TABLA
             ///////////////////////////////////////////////////////////////////
-//            echo '<pre>';
-//            print_r(
-//                    $arrayefectividadacadem);
-//            echo '<pre>';
-////
-//            return;
+
             $colaux = $col4 + 2;
             $fil4 = $fil4 + 2;
             foreach ($arrayefectividadacadem as $index => $fila) {
@@ -2704,20 +2751,13 @@ class AdministradorController extends Controller {
                 foreach ($fila as $value) {
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue(chr($col4) . $fil4, $value);
+                    $this->cellColor(chr($col4) . $fil4, $blanco, $negro, 8, true, 'c', $objPHPExcel);
+
                     $col4++;
                 }
                 $fil4++;
             }
-            //
-//        $objPHPExcel->setActiveSheetIndex(0)
-//                ->getStyle('K1:O1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
-////                ->setCellValue('K6', 'DE NUVO POR ACA')
-////                ->getStyle('K6:O6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
-//        ;
-//
-//            $objPHPExcel->setActiveSheetIndex(0)
-//                    ->setCellValue('K6', 'DHOLA EN Q ESTAS')
-//                    ->getStyle('K6:O10')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::VERTICAL_JUSTIFY);
+
             // Rename worksheet
             $objPHPExcel->getActiveSheet()->setTitle('REPORTE DE NOTAS');
 
@@ -2755,9 +2795,7 @@ class AdministradorController extends Controller {
             $aling = PHPExcel_Style_Alignment::HORIZONTAL_LEFT;
         } if ($alineacion == 'j') {
             $aling = PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY;
-        } else
-            $aling = 0;
-
+        }
 
         $styleArray = array(
             'font' => array(
