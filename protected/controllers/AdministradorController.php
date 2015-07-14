@@ -2491,7 +2491,43 @@ class AdministradorController extends Controller {
             $rojo = 'FF0000';
             $azul = '0000FF';
 
-            // Add some data
+            // INICIO CABECERA
+            $colini = 65; //A
+            $filini = 3;
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue(chr($colini) . ($filini), 'APELLIDOS Y NOMBRES:');
+            $this->cellColor(chr($colini) . ($filini), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($colini+1) . $filini . ':' . chr($colini + 13) . ($filini))
+                    ->setCellValue(chr($colini+1) . ($filini), '?nombres');
+            $this->cellColor(chr($colini+1) . $filini . ':' . chr($colini + 13) . ($filini), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+            ////////////////////////////////////////////////
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue(chr($colini) . ($filini + 1), 'NIVEL:                ?secundaria');
+            $this->cellColor(chr($colini) . ($filini + 1), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($colini + 1) . ($filini + 1) . ':' . chr($colini + 6) . ($filini + 1))
+                    ->setCellValue(chr($colini + 1) . ($filini + 1), 'GRADO:');
+            $this->cellColor(chr($colini + 1) . ($filini + 1) . ':' . chr($colini + 6) . ($filini + 1), $blanco, $negro, 10, true, 'c', $objPHPExcel);
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue(chr($colini + 7) . ($filini + 1), '?? quinto');
+            $this->cellColor(chr($colini + 7) . ($filini + 1), $blanco, $negro, 10, true, 'c', $objPHPExcel);
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($colini + 8) . ($filini + 1) . ':' . chr($colini + 9) . ($filini + 1))
+                    ->setCellValue(chr($colini + 8) . ($filini + 1), 'SECCIÓN:');
+            $this->cellColor(chr($colini + 8) . ($filini + 1) . ':' . chr($colini + 9) . ($filini + 1), $blanco, $negro, 10, true, 'c', $objPHPExcel);
+
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->mergeCells(chr($colini + 10) . ($filini + 1) . ':' . chr($colini + 13) . ($filini + 1))
+                    ->setCellValue(chr($colini + 10) . ($filini + 1), '?seccion a:');
+            $this->cellColor(chr($colini + 10) . ($filini + 1) . ':' . chr($colini + 13) . ($filini + 1), $blanco, $negro, 10, true, 'c', $objPHPExcel);
+            
+            // FIN CCABECERA
             //GENERANDO LA PRIMERA TABLA 
 
 
@@ -2501,8 +2537,7 @@ class AdministradorController extends Controller {
             $this->setAnchoColumna(chr($col), 40, $objPHPExcel);
             $objPHPExcel->setActiveSheetIndex(0)
                     ->mergeCells(chr($col) . $fil . ':' . chr($col) . ($fil + 1))
-                    ->setCellValue(chr($col) . $fil, 'PROMEDIO POR CURSO')
-            ;
+                    ->setCellValue(chr($col) . $fil, 'PROMEDIO POR CURSO');
             $this->cellColor(chr($col) . $fil . ':' . chr($col) . ($fil + 1), $blanco, $negro, 8, true, 'c', $objPHPExcel);
 
             $objPHPExcel->setActiveSheetIndex(0)
