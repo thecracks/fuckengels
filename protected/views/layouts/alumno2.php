@@ -32,9 +32,9 @@
                     <li>
                         <a id="alumno/verasistencias" >Asistencia</a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a id="alumno/seguimiento_evaluacion" >Seguimiento evaluación</a>
-                    </li>
+                    </li> -->
 <!--                    <li>
                                                 <a href="alumno/estadistica" >Promedio curso</a>
                         <a id="alumno/estadistica" >Promedio curso</a>

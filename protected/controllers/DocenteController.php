@@ -19,7 +19,6 @@ class DocenteController extends Controller {
      */
     public function actionIndex() {
 
-     
         date_default_timezone_set('America/Lima');
 
         $iddocente = Yii::app()->user->id;
@@ -298,7 +297,7 @@ class DocenteController extends Controller {
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
-
+        
         echo 'ok';
     }
 

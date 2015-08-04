@@ -14,10 +14,9 @@ return array(
     'import' => array(
         'application.models.*',
         'application.components.*',
-        'application.vendors.phpexcel.PHPExcel',
     ),
     'modules' => array(
-        // uncomment the following to enable the Gii tool
+        // uncomment the following to enable the Gii toola
 
         'gii' => array(
             'class' => 'system.gii.GiiModule',
@@ -65,6 +64,8 @@ return array(
                 )
             ),
         ),
+        
+        
         'user' => array(
             // enable cookie-based authentication
             'allowAutoLogin' => true,

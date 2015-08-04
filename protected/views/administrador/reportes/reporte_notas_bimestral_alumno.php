@@ -20,8 +20,10 @@
         </table>
     </div>
 
-</div><br>
+</div>
 
+
+<br>
 <div class="row"  style=" font-size: 10px">
 
 
@@ -126,7 +128,10 @@
 
                 </tr>
             </table>
-        </div><br>
+        </div>
+
+
+        <br>
 
 
         <div class="row">
@@ -159,10 +164,12 @@
 
                             $estilo = '';
 
-                            if ($celda <= 10) {
-                                $estilo = 'class="notadesaprobatoria"';
-                            } else if ($celda <= 20) {
-                                $estilo = 'class="notaaprobatoria"';
+                            if ($key != 'area') {
+                                if ($celda <= 10) {
+                                    $estilo = 'class="notadesaprobatoria"';
+                                } else if ($celda <= 20) {
+                                    $estilo = 'class="notaaprobatoria"';
+                                }
                             }
                             echo '<td ' . $estilo . '>' . $celda . '</td>';
                         }
@@ -182,8 +189,9 @@
                 }
                 ?>
             </table>
-        </div><br>
+        </div>
 
+        <br>
 
         <div class="row">
 
@@ -219,6 +227,9 @@
                     <td></td>
                 </tr>
             </table>
-        </div><br>
+        </div>
+
+
+        <br>
     </div>
 </div>

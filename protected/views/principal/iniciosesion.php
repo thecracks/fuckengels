@@ -27,16 +27,15 @@
 
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                            <input id="txtpass"  type="password" class="form-control" name="password" placeholder="Contrase帽a" required="true">
+                            <input id="txtpass"  type="password" class="form-control" name="password" placeholder="Contraseña" required="true">
                         </div>
                         <br />
                         <input type="submit" value="INGRESAR" class="btn btn-lg btn-primary btn-block">
-
-<!--                        <button id="btnlogin" class="btn btn-lg btn-primary btn-block" type="submit" >
-                            Iniciar Sesi贸n
-                        </button>-->
                         <br />
                     </form>
+                        <button class="btn btn-lg btn-primary btn-block" >
+                            <a href="http://engels.edu.pe/webmail"><font style="color:white">Correo Corporativo</font></a>
+                        </button>
                     </div>
                 </div>
             </div>

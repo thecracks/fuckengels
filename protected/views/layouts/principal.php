@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="utf-8">
+    <head><meta http-equiv="Content-Type" content="text/html; charset=gb18030">
+        
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
@@ -36,67 +36,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#051a2e', end
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                        <span class="sr-only">Toggle navigation</span>
+                        <span class="sr-only">ENGELS NAVEGACIÓN</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="<?php echo Yii::app()->request->baseUrl . '/principal'; ?>">ENGELS CLASS</a>
+                    <a class="navbar-brand" href="http://engels.edu.pe/">REGRESAR A LA PÁGINA PRINICPAL </a>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        <!--<li>
-                            <a href="about.html">NOSOTROS</a>
-                        </li>
-                        <li>
-                            <a href="services.html">Services</a>
-                        </li>
-                        <li>
-                            <a href="contact.html">Contact</a>
-                        </li>-->
-                        <li class="dropdown">
-                            <a href="" class="dropdown-toggle" data-toggle="dropdown">NOSOTROS<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="<?php echo Yii::app()->request->baseUrl . '/principal/nuestraHistoria'; ?>">Nuestra Historia</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo Yii::app()->request->baseUrl . '/principal/enfoque'; ?>">Misi贸n y Visi贸n</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo Yii::app()->request->baseUrl . '/principal/valores'; ?>">Valores Institucionales</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="" class="dropdown-toggle" data-toggle="dropdown">INFORMES <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="<?php echo Yii::app()->request->baseUrl . '/principal/nuevos'; ?>">Alumnos Nuevos</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo Yii::app()->request->baseUrl . '/principal/regulares'; ?>">Alumnos Regulares</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo Yii::app()->request->baseUrl . '/principal/traslados'; ?>">Traslados</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="" class="dropdown-toggle" data-toggle="dropdown">UBICANOS<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="<?php echo Yii::app()->request->baseUrl . '/principal/sedePorvenir'; ?>">El Porvenir</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo Yii::app()->request->baseUrl . '/principal/sedeLaredo'; ?>">Laredo</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="<?php echo Yii::app()->request->baseUrl . '/principal/login'; ?>">INTRANET</a>
-                        </li>
+
                     </ul>
                 </div>
                 <!-- /.navbar-collapse -->
@@ -113,7 +63,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#051a2e', end
                 <div class="row">
                     <div class="col-md-12">
                         <br />
-                        <p>Copyright &copy; 2014 Corporaci贸n Educativa Engels Class</p>  
+                        <p>Copyright &copy; 2014 Corporación Educativa Engels Class</p>  
                     </div>
                 </div>
             </div>
@@ -132,4 +82,3 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#051a2e', end
         </script>
     </body>
 </html>
-

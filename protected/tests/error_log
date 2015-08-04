@@ -1,0 +1,2 @@
+[03-Feb-2015 11:43:48 America/New_York] PHP Warning:  require_once(PHPUnit/Extensions/SeleniumTestCase.php): failed to open stream: No such file or directory in /home/colegioengels/public_html/GestionAcademicaYii/framework/test/CWebTestCase.php on line 12
+[03-Feb-2015 11:43:48 America/New_York] PHP Fatal error:  require_once(): Failed opening required 'PHPUnit/Extensions/SeleniumTestCase.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/colegioengels/public_html/GestionAcademicaYii/framework/test/CWebTestCase.php on line 12

@@ -12,7 +12,6 @@ $(document).ready(function () {
 
     var tabla = "";
 
-
     $(document).on("change", "#div_registronotas_ad", function () {
 
         if (hasreload) {
@@ -74,7 +73,7 @@ $(document).ready(function () {
         grado = $(this).attr("id").split("_")[4];
         seccion = $(this).attr("id").split("_")[5];
 
-        alert(codmatricula);
+//        alert(codmatricula);
 
 //        alert("holas");
 
@@ -92,15 +91,15 @@ $(document).ready(function () {
                 finalizaAnimacion(textStatus);
             },
             success: function (response) {
-                alert("llego");
+//                alert("llego");
                 if (response == 'ok')
                 {
                     finalizaAnimacion(response);
-                    activaDemaspestaña();
-                    $('#ifreportebimestra_rna_ad').each(function () {
-                        this.contentWindow.location.reload(true);
-                    });
-                    $("#frGeneraReporteBimestralll").submit();
+//                    activaDemaspestaña();
+//                    $('#ifreportebimestra_rna_ad').each(function () {
+//                        this.contentWindow.location.reload(true);
+//                    });
+                    $("#frGeneraReporteBimestral").submit();
                 }
             }
         });
@@ -161,7 +160,6 @@ $(document).ready(function () {
     }
 
     function cargaCuerpoTabla(prop, i) {
-
 
         console.log(jsonTablaActual[prop]);
         tabla += '<tr>';

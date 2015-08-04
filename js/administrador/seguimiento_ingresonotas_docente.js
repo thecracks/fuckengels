@@ -23,6 +23,7 @@ $(document).ready(function () {
     });
 
 
+
     //CUANDO SE SELEECIONA UN docente 
     $(document).on("click", "a[id^='iddocente_']", function ()
     {
