@@ -21,6 +21,8 @@
         <!--<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.js"></script>-->
 <!--        <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap-modalmanager.js"></script>
         <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap-modal.js"></script>-->
+        
+         <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/funciones.js"></script>
 
 
         <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/administrador/matricula.js"></script>

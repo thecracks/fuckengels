@@ -1,1 +1,0 @@
-var rutaFija = '/GestionAcademicaYii/GestionAcademica/';

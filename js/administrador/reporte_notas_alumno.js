@@ -73,14 +73,6 @@ $(document).ready(function () {
         grado = $(this).attr("id").split("_")[4];
         seccion = $(this).attr("id").split("_")[5];
 
-//        alert(codmatricula);
-
-//        alert("holas");
-
-        $("#frGeneraReporteBimestral").submit();
-
-//        $("#frGeneraReporteBimestralll").submit();
-
         iniciaAnimacionModal();
         $.ajax({
             type: "POST",
@@ -92,15 +84,12 @@ $(document).ready(function () {
             },
             success: function (response) {
 //                alert("llego");
+                finalizaAnimacion(response);
                 if (response == 'ok')
                 {
-                    finalizaAnimacion(response);
-//                    activaDemaspestaña();
-//                    $('#ifreportebimestra_rna_ad').each(function () {
-//                        this.contentWindow.location.reload(true);
-//                    });
                     $("#frGeneraReporteBimestral").submit();
                 }
+                console.log("estamos por aca xxxxxx");
             }
         });
     });

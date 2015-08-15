@@ -2406,16 +2406,13 @@ class AdministradorController extends Controller {
         $_SESSION['encabezado']['nivel'] = $_POST['nivel'];
         $_SESSION['encabezado']['grado'] = $_POST['grado'];
         $_SESSION['encabezado']['seccion'] = $_POST['seccion'];
-//        print_r($_SESSION['codmatricula']);
+
         echo 'ok';
     }
 
-  
     public function actionCargareportebimstralalumno() {
 
-//        $_SESSION['codmatricula'] = 62;
-
-        if (isset($_SESSION['codmatricula'])) {
+        if (isset($_SESSION['codmatricula']) && $_SESSION['codmatricula'] != NULL) {
 
             $codmatricula = $_SESSION['codmatricula'];
             $encabezado = $_SESSION['encabezado'];
@@ -2457,25 +2454,10 @@ class AdministradorController extends Controller {
                 }
             }
 
-            return $this->reporteBimestralAlumnoExcel($encabezado, $datapromedioscursos, $datapromediosareas, $arraypbareas, $arraynasistencias, $arrayefectividadacadem);
-
-//            echo 'HOLAS ';
-//            $this->layout = '//layouts/layout_reportebimestral_alumno';
-//
-//            $this->render('reportes/reporte_notas_bimestral_alumno', array('datapromedioscursos' => $datapromedioscursos,
-//                'datapromediosareas' => $datapromediosareas, 'pbarea' => $arraypbareas, 'arraynasistencias' => $arraynasistencias,
-//                'encabezado' => $encabezado, 'arrayefectividadacadem' => $arrayefectividadacadem));
-//
-//            return;
-//
-//            $html2pdf = Yii::app()->ePdf->HTML2PDF();
-//            $html2pdf->setDefaultFont('Times');
-//            $html2pdf->WriteHTML($this->render('reportes/reporte_notas_bimestral_alumno', array('datapromedioscursos' => $datapromedioscursos,
-//                        'datapromediosareas' => $datapromediosareas, 'pbarea' => $arraypbareas, 'arraynasistencias' => $arraynasistencias,
-//                        'encabezado' => $encabezado, 'arrayefectividadacadem' => $arrayefectividadacadem), true));
-//            $html2pdf->Output('rep_matriculas_.pdf', EYiiPdf::OUTPUT_TO_DOWNLOAD);
+            $this->reporteBimestralAlumnoExcel($encabezado, $datapromedioscursos, $datapromediosareas, $arraypbareas, $arraynasistencias, $arrayefectividadacadem);
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
+//        echo '';
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////NOTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         ///////////////////// FALTA MEJORAR LOS ESTILOS DEL REPORTE (SALEEN UNO ABAJO DEL OTRO)))
@@ -2483,24 +2465,13 @@ class AdministradorController extends Controller {
 
     private function reporteBimestralAlumnoExcel($encabezado, $datapromedioscursos, $datapromediosareas, $arraypbareas, $arraynasistencias, $arrayefectividadacadem) {
 
-        //
-        //$phpExcelPath = Yii::getPathOfAlias('ext.phpexcel');
 
-//
-// vamos a desactivar la forma en la que Yii carga las clases
-        //spl_autoload_unregister(array('YiiBase','autoload'));
 
-        
-// 
-// Cuando PHPExcel es incluido, registra su propio autoload
-        //include($phpExcelPath . DIRECTORY_SEPARATOR . 'PHPExcel.php');
-
-        Yii::import('ext.phpexcel.XPHPExcel');      
+        Yii::import('ext.phpexcel.XPHPExcel');
         $objPHPExcel = XPHPExcel::createPHPExcel();
 
 
-        $objPHPExcel = new PHPExcel();
-
+//        $objPHPExcel = new PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("ENGELS")
                 ->setLastModifiedBy("ENGELS")
@@ -2531,7 +2502,7 @@ class AdministradorController extends Controller {
         $this->cellColor(chr($colini + 1) . $filini . ':' . chr($colini + 13) . ($filini), $blanco, $negro, 10, true, 'i', $objPHPExcel);
         ////////////////////////////////////////////////
         $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue(chr($colini) . ($filini + 1), 'NIVEL:                '.$encabezado['nivel']);
+                ->setCellValue(chr($colini) . ($filini + 1), 'NIVEL:                ' . $encabezado['nivel']);
         $this->cellColor(chr($colini) . ($filini + 1), $blanco, $negro, 10, true, 'i', $objPHPExcel);
 
         $objPHPExcel->setActiveSheetIndex(0)
@@ -2826,10 +2797,11 @@ class AdministradorController extends Controller {
         $objPHPExcel->setActiveSheetIndex(0);
 
 //        // Save a xls file
-        $filename = 'YiiExcel';
+        $filename = $encabezado['nombre'];
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
         header('Cache-Control: max-age=0');
+        header("Expires: 0");
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 
@@ -2840,6 +2812,7 @@ class AdministradorController extends Controller {
         unset($this->objReader);
         unset($this->objPHPExcel);
         exit();
+        return;
     }
 
     private function cellColor($cells, $colorfondo, $colorletra, $tamletra, $bold, $alineacion, $obj) {
@@ -2934,6 +2907,155 @@ class AdministradorController extends Controller {
         $this->renderPartial('ajax_tablas/tabla_cursosasignados', array('datosCursos' => $listacursosa));
     }
 
+    public function actionAjax_carga_notasbimestre() {
+
+        $idcurso = $_POST['idcurso'];
+        $idbimistre = $_POST['bimestre'];
+
+
+        $arrayIdsCabecera = array();
+        $arrayCabecera = array();
+        $arrayCompetencias = array();
+        $arrayData = array();
+        $arrayPesos = array();
+        $arrayControlCapacidades = array();
+        $arrayControlBimestre = array();
+
+        $cmdDatosCurso = " CALL CARGA_DATOSCURSOASIGNADO_DOCENTE(" . $idcurso . ");";
+        $DatosCursoasignado = Yii::app()->db->createCommand($cmdDatosCurso)->queryRow();
+
+
+        $cmdNombresYapellidos = " CALL CARGA_ALUMNOS_X_CURSOASIGNADO(" . $idcurso . ");";
+        $dataNombresyApellidos = Yii::app()->db->createCommand($cmdNombresYapellidos)->queryAll();
+
+        if (count($dataNombresyApellidos) > 0) {
+
+            $id = 2;
+            $arrayCabecera[0] = "id";
+            $arrayCabecera[1] = "AN";
+
+            $arrayIdsCabecera[1] = "";
+            $arrayPesos[1] = "";
+            $arrayTotales = array();
+
+
+            $j = 0;
+            foreach ($dataNombresyApellidos as $filaNombre) {
+                $arrayData[0][$j] = $filaNombre['idpersona'];
+                $arrayData[1][$j] = $filaNombre['Nombre'];
+                $j++;
+            }
+
+            $sumaPesosCapacidades = 0;
+
+            $cmdIdsCompetencias = " CALL CARGA_IDCAPACIDADES_X_CURSOASIGNADO(" . $idcurso . ");";
+            $idsCompetencias = Yii::app()->db->createCommand($cmdIdsCompetencias)->queryAll();
+
+            $cuentaCompetencias = 0;
+
+            foreach ($idsCompetencias as $competencia) {
+
+                $idCompetencia = $competencia['idCOMPETENCIAS'];
+                $descripcionCompetencia = $competencia['descripcion'];
+                $pesoCompetencia = $competencia['peso'];
+
+                $cmdIdsEvaluaciones = " CALL CARGA_IDEVALUACIONES_X_CAPACIDAD(" . $idCompetencia . "," . $idcurso . ");";
+                $idsEvaluaciones = Yii::app()->db->createCommand($cmdIdsEvaluaciones)->queryAll();
+
+                $sumaPesosEvaluaciones = 0;
+
+                $cuentaEvaluaciones = 0;
+
+                foreach ($idsEvaluaciones as $evaluacion) {
+
+                    $idevaluacion = $evaluacion['idevaluacion'];
+                    $pesoEvaluacion = $evaluacion['peso'];
+
+                    $arrayIdsCabecera[$id] = "E-" . $idevaluacion . "_C-" . $idCompetencia;
+                    $arrayPesos[$id] = $pesoEvaluacion;
+
+                    $sumaPesosEvaluaciones = $sumaPesosEvaluaciones + $pesoEvaluacion;
+
+                    $arrayControlCapacidades[$idCompetencia][$cuentaEvaluaciones] = $id;
+                    $cuentaEvaluaciones++;
+
+                    //PARA CARGAR LAS NOTAS POR EVALUACION  DE LOS ALUMNOS
+                    $cmdNotasXevaluacion = " CALL CARGA_NOTAS_X_EVALUACION(" . $idCompetencia . "," . $idevaluacion . "," . $idcurso . "," . $idbimistre . ");";
+                    $notasEvaluacion = Yii::app()->db->createCommand($cmdNotasXevaluacion)->queryAll();
+
+                    $j = 0;
+                    foreach ($notasEvaluacion as $nota) {
+                        $arrayData[$id][$j] = $nota['nota'];
+                        $j++;
+                    }
+
+                    //$arrayCompetencias[$descripcionCompetencia] = $j;
+                    $arrayCabecera[$id] = $evaluacion['descripcion'];
+                    $id++;
+                }
+                $arrayCompetencias[$descripcionCompetencia] = $cuentaEvaluaciones;
+
+                //PARA CARGAR LOS DATOS DE LAS PROMEDIOS POR CAPACIDAD DE LOS ALUMNOS
+                $cmdPromediosXcompetencia = " CALL CARGA_PROMEDIOS_X_COMPETENCIA(" . $idCompetencia . "," . $idcurso . "," . $idbimistre . ");";
+                $promediosCompetencia = Yii::app()->db->createCommand($cmdPromediosXcompetencia)->queryAll();
+
+                $j = 0;
+                foreach ($promediosCompetencia as $promedio) {
+                    $arrayData[$id][$j] = $promedio['promediocompetencia'];
+                    $j++;
+                }
+
+                $arrayControlBimestre[$cuentaCompetencias] = $id;
+                $cuentaCompetencias++;
+
+                $arrayIdsCabecera[$id] = "PC-" . $idCompetencia;
+                $arrayPesos[$id] = $pesoCompetencia;
+                $arrayCabecera[$id] = "P";
+
+                $arrayTotales["C-" . $idCompetencia] = $sumaPesosEvaluaciones;
+                $id++;
+
+                $sumaPesosCapacidades = $sumaPesosCapacidades + $pesoCompetencia;
+            }
+
+            $arrayCabecera[$id] = "P";
+
+            $arrayIdsCabecera[$id] = "PB";
+            $arrayPesos[$id] = 0;
+
+            $arrayTotales["PB"] = $sumaPesosCapacidades;
+
+            $cmdPromediosXbimestre = " CALL CARGA_PROMEDIOS_X_BIMESTRE(" . $idcurso . "," . $idbimistre . ");";
+            $promedioBimestre = Yii::app()->db->createCommand($cmdPromediosXbimestre)->queryAll();
+
+            $j = 0;
+            foreach ($promedioBimestre as $promedio) {
+                $arrayData[$id][$j] = $promedio['promediobimestral'];
+                $j++;
+            }
+
+            $cantidadColumnas = count($arrayData);
+            $cantidadFilas = count($arrayData[0]);
+
+            $arrayDataNuevo = array();
+
+            for ($fila = 0; $fila < $cantidadFilas; $fila++) {
+                for ($colu = 0; $colu < $cantidadColumnas; $colu++) {
+                    $arrayDataNuevo[$fila][$colu] = $arrayData[$colu][$fila];
+                }
+            }
+
+//             $this->layout = '//layouts/layout_onlycss';
+
+
+            $this->renderPartial('ajax_tablas/tabla_notasxbimestre', array('arrayDataNuevo' => $arrayDataNuevo, 'arrayCabecera' => $arrayCabecera,
+                'arrayCompetencias' => $arrayCompetencias, 'arrayIdsCabecera' => $arrayIdsCabecera,
+                'datoscurso' => $DatosCursoasignado, 'idbimestre' => $idbimistre));
+        } else {
+            echo '<h3>No hay alumnos matriculados en este curso</h3>';
+        }
+    }
+
     //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
     //EFECTIVIFAF ACADEMICA
@@ -2951,7 +3073,7 @@ class AdministradorController extends Controller {
 
         $cmdactualizaea = "CALL actualiza_efectividad_academica (" . $idanio . "," . $filial . ",'" . $nivel . "','" . $grado . "'," . $seccion .
                 "," . $bimestre . ");";
-        Yii::app()->db->createCommand($cmdactualizaea)->execute();//$command->execute();
+        Yii::app()->db->createCommand($cmdactualizaea)->execute(); //$command->execute();
 
 
         $mostrar = "CALL Call_bimestre_puesto(" . $idanio . "," . $filial . ",'" . $nivel . "','" . $grado . "'," . $seccion . "," . $bimestre . ");";

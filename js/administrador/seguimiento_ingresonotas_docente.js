@@ -1,12 +1,17 @@
 //////PESTAÑA SELECCIONAR CURSO
 $(document).ready(function () {
 
+    var idcurso = 0;
+
 
     $(document).on("mouseenter", "#div_seguimiento_ingresonotasdocente_ad", function () {
 
         if (hasreload) {
             iniciaAnimacionLocal($("#div_cargaTablalistadocentes"));
-            
+            setids_li_tab('li_sid_ad_', 'tab_sid_ad_');
+            desabilitapestaña(0);
+            activapestaña(1);
+
             $.ajax({
                 type: "POST",
                 url: 'administrador/ajax_carga_listadocentes',
@@ -55,30 +60,47 @@ $(document).ready(function () {
     //CUANDO SE SELEECIONA UN CURSSOOOO 
     $(document).on("click", "a[id^='idcursoasignadoad_']", function ()
     {
-        var idcurso = $(this).attr("id").split("_")[1];
+        idcurso = $(this).attr("id").split("_")[1];
+        activapestaña(3);
 
-        iniciaAnimacionModal();
+//        iniciaAnimacionModal();
+//
+//        $.ajax({
+//            type: "POST",
+//            url: 'administrador/ajax_carga_notasbimestre',
+//            data: {idcurso: idcurso},
+//            cache: false,
+//            error: function (jqXHR, textStatus, errorThrown) {
+//                finalizaAnimacion(textStatus);
+//            },
+//            success: function (html) {
+//                finalizaAnimacion("ok");
+//                $('#cargatablacursosasignados_sid_ad').html(html);
+//                activa1rapestaña(3);
+//            }
+//        });
+    });
+
+    $(document).on("change", "#cbbimestrecurso_sid_ad", function ()
+    {
+        var idbimestre = $(this).val();
+        iniciaAnimacionLocal($("#cargaTablaNotasBimestral_ad"));
 
         $.ajax({
             type: "POST",
-            url: 'administrador/ajax_carga_listacursosasignados',
-            data: {idcurso: idcurso},
+            data: {bimestre: idbimestre, idcurso: idcurso},
+            url: 'administrador/ajax_carga_notasbimestre',
             cache: false,
             error: function (jqXHR, textStatus, errorThrown) {
                 finalizaAnimacion(textStatus);
             },
             success: function (html) {
-                finalizaAnimacion("ok");
-                activa1rapestaña(3);
-
+                $('#cargaTablaNotasBimestral_ad').html(html);
+                cargaArrayPreviosControl();
             }
         });
     });
 
-    $(document).on("click", "[id='btnimprimirtablanotas_rn_do']", function ()
-    {
-        imprimirSegmento('cargaTablaNotasBimestral');
-    });
 
 
     ////////////////////////////////////////////////////////////////////////////
@@ -87,52 +109,6 @@ $(document).ready(function () {
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
-//    function activa1rapestaña() {
-//
-//        $("[id*='tabre']").removeClass("active in");
-//        $("#tabseleccionacursoasignado_rn_do").addClass("active in");
-//
-//        $("[id*='li_re']").removeClass("active");
-//        $("[id*='li_re']").addClass("deshabilitado");
-//
-//        $("#li_seleccionacurso_rn_do").removeClass("deshabilitado");
-//        $("#li_seleccionacurso_rn_do").addClass("active");
-//    }
-//
-//    function activaDemaspestaña() {
-//        $("#tabregistranotas_rn_do").addClass("active in");
-//        $("#tabseleccionacursoasignado_rn_do").removeClass("active in");
-//
-//        $("[id*='li_re']").removeClass("deshabilitado");
-//        $("#li_seleccionacurso_rn_do").addClass("deshabilitado");
-//
-//        $("#li_registranota_rn_do").addClass("active");
-//    }
-
-    function activapestaña(n) {
-
-        var preidli = 'li_sid_ad_';
-        var preidtab = 'tab_sid_ad_';
-
-        $("[id^='" + preidtab + "']").removeClass("active in");
-        $("#" + preidtab + n + "").addClass("active in");
-
-        $("[id^='" + preidli + "']").removeClass("active deshabilitado");
-        $("#" + preidli + n + "").addClass("active");
-    }
-
-    function desabilitapestaña(n) {
-
-        var preidli = 'li_sid_ad_';
-        var preidtab = 'tab_sid_ad_';
-
-        if (n == 0) {
-            $("[id^='" + preidli + "']").addClass("deshabilitado");
-        } else
-        {
-            $("#" + preidli + n + "").addClass("deshabilitado");
-        }
-    }
 });
 
 
