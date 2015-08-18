@@ -277,5 +277,28 @@ class PrincipalController extends Controller {
         Yii::app()->user->logout();
         $this->redirect(Yii::app()->homeUrl);
     }
+    
+    // parte de asistencia docente acceso
+    public function actionAccesoAsistencia(){
+        $dniAsistencia = $_POST["txtDNI"];
+        $tipo = 'docente';
+        
+        
+        $sql = "SELECT * FROM persona where DNI= '" . $dniAsistencia . "'";
+        $datos = Yii::app()->db->createCommand($sql)->queryRow();
+        
+        $arrayUsuario = array('username' => $datos["usuario"], 'password' => $datos["contra"], 'rememberMe' => '0');
+        $model = new LoginForm;
+        $model->attributes = $arrayUsuario;
+        
+        if ($model->validate() && $model->login() && $datos["tipo"]==$tipo){   
+            $_SESSION['layoutrol']='//layouts/layoutControlAsistencia';
+            $this->redirect(Yii::app()->request->baseUrl . '/asistencia');                   
+        }
+        else {
+            $this->render('loginAsistencia');
+        }
+    }
+    
 
 }
