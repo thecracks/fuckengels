@@ -2465,14 +2465,9 @@ class AdministradorController extends Controller {
 
     private function reporteBimestralAlumnoExcel($encabezado, $datapromedioscursos, $datapromediosareas, $arraypbareas, $arraynasistencias, $arrayefectividadacadem) {
 
-
-
         Yii::import('ext.phpexcel.XPHPExcel');
         $objPHPExcel = XPHPExcel::createPHPExcel();
 
-
-//        $objPHPExcel = new PHPExcel();
-        // Set document properties
         $objPHPExcel->getProperties()->setCreator("ENGELS")
                 ->setLastModifiedBy("ENGELS")
                 ->setTitle("REPORTE DE NOTAS")
@@ -3056,6 +3051,150 @@ class AdministradorController extends Controller {
         }
     }
 
+    private function reporte_excel_notasxbimestrexcurso() {
+
+        Yii::import('ext.phpexcel.XPHPExcel');
+        $objPHPExcel = XPHPExcel::createPHPExcel();
+
+        $objPHPExcel->getProperties()->setCreator("ENGELS")
+                ->setLastModifiedBy("ENGELS")
+                ->setTitle("REPORTE NOTAS X CURSO")
+                ->setSubject("coming soom")
+                ->setDescription("Test document for YiiExcel, generated using PHP classes.")
+                ->setKeywords("office PHPExcel php YiiExcel UPNFM")
+                ->setCategory("Test result file");
+
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        //COLORES FUENTES
+
+        $negro = '000000';
+        $blanco = 'FFFFFF';
+        $rojo = 'FF0000';
+        $azul = '0000FF';
+
+        // INICIO CABECERA
+        $colini = 65; //A
+        $filini = 1;
+
+        $objPHPExcel->setCellValue(chr($colini) . ($filini + 1), 'AREA:');
+        $this->cellColorMejor(chr($colini) . ($filini) . ':' . chr($colini + 1) . ($filini + 1), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+
+        $objPHPExcel->setCellValue(chr($colini) . ($filini + 3), 'NIVEL:');
+        $this->cellColorMejor(chr($colini) . ($filini + 2) . ':' . chr($colini + 1) . ($filini + 3), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+
+        $objPHPExcel->setCellValue(chr($colini) . ($filini + 5), 'CURSO:');
+        $this->cellColorMejor(chr($colini) . ($filini + 4) . ':' . chr($colini + 1) . ($filini + 5), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+
+        $objPHPExcel->setCellValue(chr($colini) . ($filini + 7), 'GRADO:');
+        $this->cellColorMejor(chr($colini) . ($filini + 6) . ':' . chr($colini + 1) . ($filini + 7), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+
+        $objPHPExcel->setCellValue(chr($colini) . ($filini + 9), 'Nº');
+        $this->cellColorMejor(chr($colini) . ($filini + 8) . ':' . chr($colini) . ($filini + 9), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+
+        $objPHPExcel->setCellValue(chr($colini + 1) . ($filini + 9), 'ALUMNO');
+        $this->cellColorMejor(chr($colini + 1) . ($filini + 8) . ':' . chr($colini + 1) . ($filini + 9), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+
+        ////////////////////////////////////////////////
+
+        $coldes = $colini + 2;
+        $fildes = $fildes + 1;
+
+        foreach ($arrayCompetencias as $key => $value) {
+
+            $objPHPExcel->setCellValue(chr($coldes) . ($fildes + 1), $key);
+            $this->cellColorMejor(chr($coldes) . ($fildes) . ':' . chr($coldes + $value - 1) . ($fildes + 1), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+            $coldes+=$value;
+            $objPHPExcel->setCellValue(chr($coldes) . ($fildes + 9), 'PROMEDIO');
+            $this->cellColorMejor(chr($coldes) . ($fildes) . ':' . chr($coldes) . ($fildes + 8), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+            $coldes++;
+        }
+
+        $objPHPExcel->setCellValue(chr($coldes) . ($fildes + 9), 'PROMEDIO BIMESTRAL');
+        $this->cellColorMejor(chr($coldes) . ($fildes) . ':' . chr($coldes) . ($fildes + 8), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+
+        $coldes = $colini + 2;
+        $fildes = $fildes + 3;
+
+        foreach ($arrayCabecera as $value) {
+            if ($value !== 'AN' && $value !== 'id') {
+                if ($value == 'P')
+                    $coldes++;
+                $objPHPExcel->setCellValue(chr($coldes) . ($fildes + 6), $value);
+                $this->cellColorMejor(chr($coldes) . ($fildes) . ':' . chr($coldes) . ($fildes + 6), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+                $coldes++;
+            }
+        }
+
+
+        $coldes = $colini;
+        $fildes = $fildes + 10;
+
+        $nfilas = count($arrayDataNuevo);
+        $ncolumnas = count($arrayDataNuevo[0]);
+
+        for ($idfila = 0; $idfila < $nfilas; $idfila++) {
+
+            $objPHPExcel->setCellValue(chr($coldes) . ($fildes + $idfila), ($idfila + 1));
+            $this->cellColorMejor(chr($coldes) . ($fildes + $idfila), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+
+
+            $idalumno = $arrayDataNuevo[$idfila][0];
+            for ($idcolu = 1; $idcolu < $ncolumnas; $idcolu++) {
+
+                $estilo = $negro;
+                if ($arrayDataNuevo[$idfila][$idcolu] <= 10 && $idcolu !== 1) {
+                    $estilo = $rojo;
+                } else if ($arrayDataNuevo[$idfila][$idcolu] <= 20 && $idcolu !== 1) {
+                    $estilo = $azul;
+                }
+
+                $objPHPExcel->setCellValue(chr($coldes + $idcolu) . ($fildes + $idfila), ($idfila + 1));
+                $this->cellColorMejor(chr($coldes + $idcolu) . ($fildes + $idfila), $blanco, $estilo, 10, true, 'i', $objPHPExcel);
+            }
+        }
+
+
+        $this->setAnchoColumna(chr($col + 1), 3, $objPHPExcel);
+
+        // Rename worksheet
+        $objPHPExcel->getActiveSheet()->setTitle('REPORTE DE NOTAS');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+//        // Save a xls file
+        $filename = $encabezado['nombre'];
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
+        header('Cache-Control: max-age=0');
+        header("Expires: 0");
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        $objWriter->save('php://output');
+
+        unset($this->objWriter);
+        unset($this->objWorksheet);
+        unset($this->objReader);
+        unset($this->objPHPExcel);
+        exit();
+        return;
+    }
+
+    private function cellColorMejor($cells, $colorfondo, $colorletra, $tamletra, $bold, $alineacion, $obj) {
+
+        if (strlen($cells) > 2) {
+            $obj->getActiveSheet()
+                    ->mergeCells($cells);
+        }
+
+        $this->cellColor($cells, $colorfondo, $colorletra, $tamletra, $bold, $alineacion, $obj);
+    }
+
+    ///////////////////////////////////////////////////
+    //  FIN  FIN  VERIFICA INGRESO DE NOTAS POR PARTE DE LO DOCENTES
+    ///////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
     //EFECTIVIFAF ACADEMICA
@@ -3103,8 +3242,6 @@ class AdministradorController extends Controller {
         $idfilial = $_SESSION['idfilial'];
         $idseccion = $_POST['seccion'];
 
-
-
         $cmdCargaAlumnosMatriculadosComportamiento = " CALL listar_alumno_comportamiento('" . $nivel . "','" . $grado . "'," . $idseccion .
                 "," . $idanio . "," . $idfilial . "," . $bimestre . ");";
         $dataea = Yii::app()->db->createCommand($cmdCargaAlumnosMatriculadosComportamiento)->queryAll();
@@ -3123,7 +3260,4 @@ class AdministradorController extends Controller {
             'comportamiento' => $comportamiento), 'codigoMatricula=:codigoMatricula and idbimestre=:idbimestre', array(':codigoMatricula' => $codMatricula, ':idbimestre' => $bimestre));
     }
 
-    ///////////////////////////////////////////////////
-    //  FIN  FIN  VERIFICA INGRESO DE NOTAS POR PARTE DE LO DOCENTES
-    ///////////////////////////////////////////////////
 }
