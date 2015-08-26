@@ -90,25 +90,20 @@
                                 </select>
                             </div>
 
-<!--                            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" >
-
-                                <button id="btnseleccionarotrocurso_rn_do1" class="btn btn-success">Seleccionar otro curso</button>
-
-                            </div>-->
-
-<!--                            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" >
-
-                                <button id="btnimprimirtablanotas_rn_do" class="btn btn-success">Imprimir Tabla Notas</button>
-
-                            </div>-->
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" >
+                                <button id="btn_generaexcelnotasxcursoxbimestre" class="btn btn-success">Descargar Excel</button>
+                            </div>
                         </div>
+                        <form id="frmReporte_Notas_excel_sid" action="<?php echo Yii::app()->request->baseUrl . '/administrador/Ajax_carga_notasbimestre'; ?>" method="POST">
+                            <input type="hidden" value="" id="input_idcurso_sid" name="idcurso">
+                            <input type="hidden" value="" id="input_idbimestre_sid" name="bimestre">
+                            <input type="hidden" value="excel"  name="opcion">
+
+                        </form>
 
                         <br>
 
                         <div class="row">
-
-
-
 
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
                                 <div class="table-responsive" id="cargaTablaNotasBimestral_ad" style=" font-size: 10px"></div>
