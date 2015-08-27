@@ -3047,7 +3047,7 @@ class AdministradorController extends Controller {
 
 
             if ($idopcion == 'excel') {
-                $this->reporte_excel_notasxbimestrexcurso($arrayDataNuevo, $arrayCabecera, $arrayCompetencias, $idbimistre);
+                $this->reporte_excel_notasxbimestrexcurso($arrayDataNuevo, $arrayCabecera, $arrayCompetencias, $idbimistre, $DatosCursoasignado);
             }
 
             $this->renderPartial('ajax_tablas/tabla_notasxbimestre', array('arrayDataNuevo' => $arrayDataNuevo, 'arrayCabecera' => $arrayCabecera,
@@ -3058,7 +3058,7 @@ class AdministradorController extends Controller {
         }
     }
 
-    private function reporte_excel_notasxbimestrexcurso($arrayDataNuevo, $arrayCabecera, $arrayCompetencias, $idbimistre) {
+    private function reporte_excel_notasxbimestrexcurso($arrayDataNuevo, $arrayCabecera, $arrayCompetencias, $idbimistre, $datoscurso) {
 
         Yii::import('ext.phpexcel.XPHPExcel');
         $objPHPExcel = XPHPExcel::createPHPExcel();
@@ -3081,6 +3081,12 @@ class AdministradorController extends Controller {
         $blanco = 'FFFFFF';
         $rojo = 'FF0000';
         $azul = '0000FF';
+        
+        //ANCHO COLUMNAS
+        
+        $tam1=5;
+        $tam2=10;
+        $tam3=60;
 
         // INICIO CABECERA
         $colini = 65;
@@ -3088,16 +3094,16 @@ class AdministradorController extends Controller {
 
         $objPHPExcelSheet = $objPHPExcel->getActiveSheet();
 
-        $objPHPExcelSheet->setCellValue(chr($colini) . ($filini), 'AREA: ');
+        $objPHPExcelSheet->setCellValue(chr($colini) . ($filini), 'AREA: ' . $datoscurso['area']);
         $this->cellColorMejor(chr($colini) . ($filini) . ':' . chr($colini + 1) . ($filini + 1), $blanco, $negro, 10, true, 'i', $objPHPExcel);
 
-        $objPHPExcelSheet->setCellValue(chr($colini) . ($filini + 2), 'NIVEL:');
+        $objPHPExcelSheet->setCellValue(chr($colini) . ($filini + 2), 'NIVEL:' . $datoscurso['nivel']);
         $this->cellColorMejor(chr($colini) . ($filini + 2) . ':' . chr($colini + 1) . ($filini + 3), $blanco, $negro, 10, true, 'i', $objPHPExcel);
 
-        $objPHPExcelSheet->setCellValue(chr($colini) . ($filini + 4), 'CURSO:');
+        $objPHPExcelSheet->setCellValue(chr($colini) . ($filini + 4), 'CURSO:' . $datoscurso['curso']);
         $this->cellColorMejor(chr($colini) . ($filini + 4) . ':' . chr($colini + 1) . ($filini + 5), $blanco, $negro, 10, true, 'i', $objPHPExcel);
 
-        $objPHPExcelSheet->setCellValue(chr($colini) . ($filini + 6), 'GRADO:');
+        $objPHPExcelSheet->setCellValue(chr($colini) . ($filini + 6), 'GRADO:' . $datoscurso['grado']);
         $this->cellColorMejor(chr($colini) . ($filini + 6) . ':' . chr($colini + 1) . ($filini + 7), $blanco, $negro, 10, true, 'i', $objPHPExcel);
 
         $objPHPExcelSheet->setCellValue(chr($colini) . ($filini + 8), 'Nº');
@@ -3106,8 +3112,8 @@ class AdministradorController extends Controller {
         $objPHPExcelSheet->setCellValue(chr($colini + 1) . ($filini + 8), 'ALUMNO');
         $this->cellColorMejor(chr($colini + 1) . ($filini + 8) . ':' . chr($colini + 1) . ($filini + 9), $blanco, $negro, 10, true, 'i', $objPHPExcel);
 
-        $this->setAnchoColumna(chr($colini), 5, $objPHPExcel); //  PARA LA ENUMERACION
-        $this->setAnchoColumna(chr($colini + 1), 50, $objPHPExcel); // para la columna de los nombes
+        $this->setAnchoColumna(chr($colini), $tam1, $objPHPExcel); //  PARA LA ENUMERACION
+        $this->setAnchoColumna(chr($colini + 1), $tam3, $objPHPExcel); // para la columna de los nombes
         ////////////////////////////////////////////////
 
         $coldes = $colini + 2;
@@ -3118,6 +3124,8 @@ class AdministradorController extends Controller {
             $objPHPExcelSheet->setCellValue(chr($coldes) . ($fildes), $key);
             $this->cellColorMejor(chr($coldes) . ($fildes) . ':' . chr($coldes + $value - 1) . ($fildes + 1), $blanco, $negro, 10, true, 'c', $objPHPExcel);
             $coldes+=$value;
+
+            $this->setAnchoColumna(chr($coldes), $tam1, $objPHPExcel); //  SETEANDO LAS COLUMNAS DE LAS NOTAS
             $objPHPExcelSheet->setCellValue(chr($coldes) . ($fildes), 'PROMEDIO');
             $this->cellColorMejor(chr($coldes) . ($fildes) . ':' . chr($coldes) . ($fildes + 8), $blanco, $negro, 10, true, 'v', $objPHPExcel);
             $objPHPExcelSheet->getStyle(chr($coldes) . ($fildes) . ':' . chr($coldes) . ($fildes + 8))->getAlignment()->setTextRotation(90);
@@ -3126,8 +3134,10 @@ class AdministradorController extends Controller {
 
         $objPHPExcelSheet->setCellValue(chr($coldes) . ($fildes), 'PROMEDIO BIMESTRAL');
         $this->cellColorMejor(chr($coldes) . ($fildes) . ':' . chr($coldes) . ($fildes + 8), $blanco, $negro, 10, true, 'c', $objPHPExcel);
-        $this->cellColorMejor(chr($coldes) . ($fildes) . ':' . chr($coldes) . ($fildes + 8), $blanco, $negro, 10, true, 'v', $objPHPExcel);
         $objPHPExcelSheet->getStyle(chr($coldes) . ($fildes) . ':' . chr($coldes) . ($fildes + 8))->getAlignment()->setTextRotation(90);
+
+        $objPHPExcelSheet->setCellValue(chr($colini + 2) . ($filini), 'BIMESTRE ' . $idbimistre);
+        $this->cellColorMejor(chr($colini + 2) . ($filini) . ':' . chr($coldes) . ($filini), $blanco, $negro, 10, true, 'c', $objPHPExcel);
 
 
         $coldes = $colini + 2;
@@ -3138,6 +3148,7 @@ class AdministradorController extends Controller {
                 if ($value == 'P') {
                     $coldes++;
                 } else {
+                    $this->setAnchoColumna(chr($coldes), $tam1, $objPHPExcel); ////// SETEANDO LAS COLUMNAS DE LAS NOTAS
                     $objPHPExcelSheet->setCellValue(chr($coldes) . ($fildes), $value);
                     $this->cellColorMejor(chr($coldes) . ($fildes) . ':' . chr($coldes) . ($fildes + 6), $blanco, $negro, 10, true, 'c', $objPHPExcel);
                     $objPHPExcelSheet->getStyle(chr($coldes) . ($fildes) . ':' . chr($coldes) . ($fildes + 6))->getAlignment()->setTextRotation(90);
@@ -3156,7 +3167,7 @@ class AdministradorController extends Controller {
         for ($idfila = 0; $idfila < $nfilas; $idfila++) {
 
             $objPHPExcelSheet->setCellValue(chr($coldes) . ($fildes + $idfila), ($idfila + 1));
-            $this->cellColorMejor(chr($coldes) . ($fildes + $idfila), $blanco, $negro, 10, true, 'i', $objPHPExcel);
+            $this->cellColorMejor(chr($coldes) . ($fildes + $idfila), $blanco, $negro, 10, true, 'd', $objPHPExcel);
 
             for ($idcolu = 1; $idcolu < $ncolumnas; $idcolu++) {
 
@@ -3168,11 +3179,17 @@ class AdministradorController extends Controller {
                 }
 
                 $objPHPExcelSheet->setCellValue(chr($coldes + $idcolu) . ($fildes + $idfila), $arrayDataNuevo[$idfila][$idcolu]);
-                $this->cellColorMejor(chr($coldes + $idcolu) . ($fildes + $idfila), $blanco, $estilo, 10, true, 'c', $objPHPExcel);
+
+                if (is_numeric($arrayDataNuevo[$idfila][$idcolu])) {
+
+                    $this->cellColorMejor(chr($coldes + $idcolu) . ($fildes + $idfila), $blanco, $estilo, 10, true, 'c', $objPHPExcel);
+                } else {
+                    $this->cellColorMejor(chr($coldes + $idcolu) . ($fildes + $idfila), $blanco, $estilo, 10, false, 'i', $objPHPExcel);
+                }
             }
         }
 
-   
+
         // Rename worksheet
         $objPHPExcel->getActiveSheet()->setTitle('REPORTE DE NOTAS');
 
@@ -3180,7 +3197,7 @@ class AdministradorController extends Controller {
         $objPHPExcel->setActiveSheetIndex(0);
 
 //        // Save a xls file
-        $filename = "Reporte Notas: " + $idbimistre;
+        $filename = "Reporte Notas: " . $idbimistre;
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
         header('Cache-Control: max-age=0');
